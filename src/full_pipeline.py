@@ -1,8 +1,3 @@
-"""Extracted code from the Marathwada Drought WSI Colab notebook.
-
-This file preserves the notebook code and cell order for reproducibility.
-The notebook is the primary source of the pipeline implementation.
-"""
 
 # ====================================================================
 # NOTEBOOK CELL 0
