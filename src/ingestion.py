@@ -1,13 +1,5 @@
 """
-src/ingestion.py
-================
-Module for loading, structurally validating, normalizing aliases,
-and building the canonical calendar for the 6 raw Marathwada hydro-climatic datasets.
-
-Strictly adheres to:
-- RAW DATA -> structural QC only (no statistical calculations before split)
-- Canonical study area: Exactly 8 districts
-- Canonical timeline: 2003-01 to 2024-12 (264 months, 2,112 district-month cells)
+Raw hydroclimatic data ingestion, district alias normalization, and calendar construction.
 """
 
 from typing import Dict, List, Tuple, Optional

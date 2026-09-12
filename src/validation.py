@@ -1,17 +1,5 @@
 """
-src/validation.py
-=================
-Comprehensive verification and auditing suite for the Marathwada WSI pipeline.
-
-Automated checks:
-1. Calendar & Key Integrity: 8 districts x 264 months = 2,112 rows, 0 duplicate keys, 0 nulls.
-2. Temporal Leakage & Forecast Origin Splits:
-   - Row-level: Train (2003-2017), Val (2018-2020), Test (2021-2024).
-   - Origin-level: Last train origin 2017-09 (targets Oct-Dec 2017), Val origin 2018-01, Test origin 2021-01.
-3. Groundwater Causality & Staleness: Strictly causal as-of dates, staleness flag correctness.
-4. Mathematical Precision: |WSI - mean(components)| < 1e-12.
-5. Model vs. Audit Parity: 100% exact match across all shared columns and keys.
-6. Historical Sanity: Latur August 2015 crisis reflects severe stress (WSI > 1.0).
+Verification and auditing suite for the Marathwada WSI data pipeline.
 """
 
 from typing import Dict, List, Tuple, Any

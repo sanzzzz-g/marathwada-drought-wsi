@@ -1,22 +1,6 @@
 """
-src/backtesting.py
-==================
-Step 6: Historical Monthly Rolling-Origin Diagnostic Backtest (2011–2020).
-
-Implements:
-1. Strict Causal Training Boundary:
-   For backtest origin t, latest_train_origin = t - 3 months.
-   Because WSI(t) is known at the end-of-month forecast cutoff, targets [t-2, t-1, t]
-   terminate at month t. No training target occurs after t.
-2. Causal Historical Preprocessing:
-   Climatological expectations and district standard deviations are fit strictly
-   on historical data <= t, preventing lookahead leakage from 2012–2017.
-3. Decoupled Role:
-   Labeled explicitly as evaluation_type = "historical_diagnostic".
-   Never modifies frozen model selection or official test metrics.
-4. Output Artifacts:
-   results/rolling_backtest_predictions.csv
-   results/rolling_backtest_metrics.csv
+Historical monthly rolling-origin diagnostic backtesting (2011–2020).
+Strict causal training boundaries with causal historical preprocessing.
 """
 
 import os
@@ -155,12 +139,7 @@ def run_historical_rolling_backtest(
     end_date = pd.Timestamp(f"{end_year}-12-01")
     origin_dates = pd.date_range(start=start_date, end=end_date, freq="MS")[::stride_months]
 
-    print("=" * 70)
-    print("STEP 6: HISTORICAL MONTHLY ROLLING-ORIGIN BACKTEST (DIAGNOSTIC)")
-    print(f"Period: {start_date.strftime('%Y-%m')} to {end_date.strftime('%Y-%m')} ({len(origin_dates)} monthly origins)")
-    print("Strict causal boundary: latest_train_origin = t - 3 months")
-    print("Causal preprocessing: statistics fit strictly on data <= t")
-    print("=" * 70)
+    print(f"Running historical rolling-origin backtest ({start_date.strftime('%Y-%m')} to {end_date.strftime('%Y-%m')}, {len(origin_dates)} origins)")
 
     backtest_records = []
 

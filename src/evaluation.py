@@ -1,20 +1,5 @@
 """
-src/evaluation.py
-=================
-Step 6: Evaluation Engine, Metrics, Statistical Significance, and Plotting.
-
-Implements:
-1. Standardized Metrics Computation:
-   - Horizon-specific (h1, h2, h3) and overall MAE, RMSE, R^2, NRMSE.
-   - Skill scores against Persistence: Skill_MAE = 1 - MAE_model / MAE_persistence.
-2. District-Level Breakdowns (all 8 districts, mean, median, best, worst).
-3. Regime-Level Diagnostics (Very Wet, Wet, Normal, Moderate Stress, Severe Stress).
-4. Event-Level Evaluation (Precision, Recall, F1 for WSI >= 0.5 and WSI >= 1.5).
-5. Statistical Significance:
-   - Primary: Moving Block Bootstrap over consecutive origin months (block length L=3,
-     preserving all 8 districts per month, B=1,000, 95% CIs).
-   - Supplementary: Diebold-Mariano test per horizon with HAC lag = h - 1.
-6. Publication Figures (8 figures saved to results/figures/).
+Evaluation engine, metrics computation, statistical significance testing, and diagnostic plotting.
 """
 
 import os
@@ -29,9 +14,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-# ==============================================================================
 # Metric Calculations
-# ==============================================================================
 
 def calc_r2(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     """Calculates R^2 score safely."""
@@ -96,9 +79,7 @@ def calc_event_f1(y_true: np.ndarray, y_pred: np.ndarray, threshold: float) -> D
     }
 
 
-# ==============================================================================
 # Statistical Significance: Moving Block Bootstrap & Diebold-Mariano
-# ==============================================================================
 
 def moving_block_bootstrap_significance(
     df: pd.DataFrame,
@@ -204,9 +185,7 @@ def diebold_mariano_test(
     return round(dm_stat, 4), round(p_val, 4)
 
 
-# ==============================================================================
-# Comprehensive Evaluation Pipeline
-# ==============================================================================
+# Evaluation Pipeline
 
 def run_evaluation_suite(
     predictions_csv: str = "results/baseline_predictions.csv",
@@ -226,15 +205,9 @@ def run_evaluation_suite(
     df = pd.read_csv(predictions_csv)
     models = sorted(df["model"].unique())
 
-    print("=" * 70)
-    print("STEP 6: COMPREHENSIVE EVALUATION & STATISTICAL COMPARISON")
-    print(f"Predictions path: {predictions_csv} ({len(df)} rows)")
-    print(f"Models evaluated: {models}")
-    print("=" * 70)
+    print(f"Running evaluation on {predictions_csv} ({len(df)} rows, models: {models})")
 
-    # --------------------------------------------------------------------------
     # 1. Baseline Horizon & Overall Metrics (with Skill vs Persistence)
-    # --------------------------------------------------------------------------
     # Find persistence MAE for skill calculations
     persist_df = df[df["model"] == "Persistence"]
     if len(persist_df) == 0 and os.path.exists("results/baselines/baseline_predictions.csv"):
@@ -307,9 +280,7 @@ def run_evaluation_suite(
         metrics_df.to_csv(os.path.join(output_dir, "baseline_metrics.csv"), index=False)
     print(f"\n1. Saved metrics: {metrics_path}")
 
-    # --------------------------------------------------------------------------
     # 2. District-Level Metrics (all 8 districts)
-    # --------------------------------------------------------------------------
     district_rows = []
     districts = sorted(df["district"].unique())
     for model_name in models:
@@ -340,9 +311,7 @@ def run_evaluation_suite(
     dist_metrics_df.to_csv(dist_path, index=False)
     print(f"2. Saved district metrics: {dist_path}")
 
-    # --------------------------------------------------------------------------
     # 3. Regime Diagnostics
-    # --------------------------------------------------------------------------
     def categorize_wsi(val: float) -> str:
         if val < -1.5:
             return "Very Wet"
@@ -383,9 +352,7 @@ def run_evaluation_suite(
     regime_df.to_csv(regime_path, index=False)
     print(f"3. Saved regime metrics: {regime_path}")
 
-    # --------------------------------------------------------------------------
     # 4. Event-Level Evaluation (WSI >= 0.5 and WSI >= 1.5)
-    # --------------------------------------------------------------------------
     event_rows = []
     for model_name in models:
         m_df = df[df["model"] == model_name]
@@ -437,9 +404,7 @@ def run_evaluation_suite(
     event_df.to_csv(event_path, index=False)
     print(f"4. Saved event metrics: {event_path}")
 
-    # --------------------------------------------------------------------------
     # 5. Statistical Significance (Bootstrap & Diebold-Mariano)
-    # --------------------------------------------------------------------------
     # Identify champion non-neural baseline by lowest overall test MAE among trained models
     champion = metrics_df.sort_values("overall_mae")["model"].iloc[0]
     print(f"\nEvaluating statistical significance against top baseline: {champion}")
@@ -476,9 +441,7 @@ def run_evaluation_suite(
     sig_df.to_csv(sig_path, index=False)
     print(f"5. Saved block-bootstrap significance: {sig_path}")
 
-    # --------------------------------------------------------------------------
     # 6. Generate 8 Publication Figures
-    # --------------------------------------------------------------------------
     print("\n6. Generating 8 publication figures in results/figures/...")
     sns.set_theme(style="whitegrid", palette="muted")
 

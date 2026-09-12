@@ -1,23 +1,6 @@
 """
-src/sequence_builder.py
-=======================
-Supervised Sequence Builder for the Marathwada Water Stress Index (WSI).
-
-Constructs fixed-size supervised input-target pairs from the frozen model dataset:
-- Lookback window: 12 months (X_t in R^(12 x 6))
-- Forecast horizon: 3 months (Y_t in R^3, targets [WSI_(t+1), WSI_(t+2), WSI_(t+3)])
-- Chronological split assigned strictly by forecast origin date:
-    Train:      2003-12-01 -> 2017-09-01 (1,328 sequences = 8 x 166)
-    Validation: 2018-01-01 -> 2020-12-01 (288 sequences   = 8 x 36)
-    Test:       2021-01-01 -> 2024-09-01 (360 sequences   = 8 x 45)
-    Total:                               (1,976 sequences = 8 x 247)
-
-Outputs saved to data_model/:
-- X_train.npy, y_train.npy
-- X_val.npy,   y_val.npy
-- X_test.npy,  y_test.npy
-- sequence_metadata.csv
-- sequence_validation.json
+Supervised sequence tensor builder for rolling-origin 3-month WSI forecasting.
+Constructs X (12, 6) input arrays and y (3,) target arrays.
 """
 
 import os
@@ -470,12 +453,8 @@ def build_sequences(
         if input_path is None:
             raise FileNotFoundError(f"Model dataset not found in default locations: {candidates}")
 
-    print("=" * 70)
-    print("STEP 5: SUPERVISED SEQUENCE BUILDER (WSI 3-MONTH FORECASTING)")
-    print(f"Input file:  {input_path}")
-    print(f"Output dir:  {output_dir}")
-    print(f"Lookback:    {LOOKBACK} months | Horizon: {HORIZON} months")
-    print("=" * 70)
+    print(f"Building supervised sequences from {input_path} to {output_dir}")
+    print(f"Lookback: {LOOKBACK} months | Horizon: {HORIZON} months")
 
     # 1. Load and validate input
     print("Step 5.1-5.3: Loading and validating model dataset...")

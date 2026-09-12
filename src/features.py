@@ -1,16 +1,6 @@
 """
-src/features.py
-===============
-Module for computing multi-tier hydro-climatic anomaly features for:
-1. ERA5-Land Soil Moisture (storage in mm)
-2. MOD13Q1 Vegetation Index (NDVI)
-3. MOD11A2 Land Surface Temperature (LST in Celsius)
-4. Global WaterPack Surface Water (Frequency)
-
-Strictly adheres to:
-- Multi-tier preservation: RAW -> TRAIN Climatology -> Physical Anomaly -> Stress-oriented Z-score
-- TRAIN-only parameter fitting: Climatology and standard deviations derived strictly from 2003-2017
-- Dimensionless stress orientation: Higher value always indicates greater drought stress
+Multi-tier hydroclimatic anomaly features for soil moisture, vegetation condition,
+land surface temperature, and surface water extent.
 """
 
 from typing import Dict, Tuple, Any

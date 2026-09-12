@@ -1,6 +1,4 @@
-# ==============================================================================
-# Python Virtual Environments
-# ==============================================================================
+# Python environments
 .venv/
 venv/
 env/
@@ -8,9 +6,7 @@ ENV/
 env.bak/
 venv.bak/
 
-# ==============================================================================
-# Byte-compiled / Optimized / Test Caches
-# ==============================================================================
+# Byte-compiled and test caches
 __pycache__/
 *.py[cod]
 *$py.class
@@ -19,9 +15,7 @@ __pycache__/
 htmlcov/
 *.log
 
-# ==============================================================================
-# Temporary / Scratch / System Files
-# ==============================================================================
+# Operating system and temporary files
 .DS_Store
 Thumbs.db
 desktop.ini
@@ -31,31 +25,22 @@ desktop.ini
 *.tmp
 *.bak
 
-# ==============================================================================
-# IDE and Editor Configurations
-# ==============================================================================
+# IDE configurations
 .idea/
 .vscode/
 
-# ==============================================================================
-# Jupyter Notebooks & Checkpoints
-# ==============================================================================
+# Jupyter notebooks and checkpoints
 .ipynb_checkpoints/
 */.ipynb_checkpoints/*
 notebooks/
 
-# ==============================================================================
-# Large Binary Data & Tensors
-# ==============================================================================
+# Large data and model binary files
 data/*.csv
 !data/sample/
 !data/sample/*.csv
 data_model/*.npy
+data_model_residual/*.npy
 *.npy
+*.keras
+*.h5
 archive/
-
-# ==============================================================================
-# Local Verification Suite (Excluded from Public GitHub)
-# ==============================================================================
-tests/
-pytest.ini

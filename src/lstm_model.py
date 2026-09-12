@@ -1,31 +1,6 @@
 """
-src/lstm_model.py
-=================
-Step 7: Small LSTM Model Implementation & Final Benchmark Comparison for
-3-Month Water Stress Index (WSI) Forecasting.
-
-Architecture:
-  Input (12, 6) -> LSTM(32) -> Dropout(0.20) -> Dense(16, relu) -> Dense(3, linear)
-
-Training Protocol:
-  - Loss: Huber(delta=1.0), Optimizer: Adam(lr=0.001), Batch size: 32, Max epochs: 200, shuffle=False
-  - Phase 1 (Seed 42 Validation Run):
-      Fit on TRAIN (1328 samples), evaluate on VAL (288 samples)
-      EarlyStopping(monitor="val_mae", patience=15, restore_best_weights=True)
-      ReduceLROnPlateau(monitor="val_mae", factor=0.5, patience=5, min_lr=1e-6)
-      E* = earliest epoch achieving min(val_mae) within 1e-8 tolerance
-      Freeze selected_lr_schedule for epochs 1...E*
-  - Phase 2 (Diagnostic Seeds 43-46):
-      Fit fresh models on TRAIN for exactly E* epochs with frozen lr_schedule
-      Evaluate on VAL to isolate weight-initialization sensitivity (no ensemble)
-  - Phase 3 (Final Model Refit):
-      Fresh seed 42 model fit on TRAIN + VAL (1616 samples) for exactly E* epochs
-      Replays frozen lr_schedule via LearningRateScheduler (no early stopping, no test data)
-      Predict on TEST (360 samples -> 1080 predictions)
-  - Phase 4 (Evaluation & Final Comparison):
-      Evaluates test metrics via src.evaluation
-      Generates results/final_model_comparison.csv (all 6 models)
-      Generates results/final_model_summary.json (decoupled validation vs test reporting)
+Small LSTM model implementation and final benchmark comparison for 3-month WSI forecasting.
+Architecture: Input (12, 6) -> LSTM(32) -> Dropout(0.20) -> Dense(16, relu) -> Dense(3, linear).
 """
 
 import os
@@ -52,9 +27,7 @@ from src.baselines import load_sequence_arrays, assemble_prediction_records
 from src.evaluation import calc_r2, calc_nrmse, run_evaluation_suite
 
 
-# ==============================================================================
 # Deterministic Settings
-# ==============================================================================
 
 def set_deterministic_tf(seed: int = 42) -> None:
     """
@@ -76,9 +49,7 @@ def set_deterministic_tf(seed: int = 42) -> None:
         )
 
 
-# ==============================================================================
-# Model Architecture & Custom Callbacks
-# ==============================================================================
+# Model Architecture
 
 def build_small_lstm(input_shape: Tuple[int, int] = (12, 6), learning_rate: float = 0.001) -> tf.keras.Model:
     """
@@ -150,9 +121,7 @@ def find_earliest_best_epoch(val_mae_history: List[float], tol: float = 1e-8) ->
     return 1
 
 
-# ==============================================================================
-# Phase 1: Validation Run & Optimal Epoch Selection (Seed 42)
-# ==============================================================================
+# Phase 1: Validation Run & Early Stopping E* Search
 
 def train_validation_phase(
     X_train: np.ndarray,
@@ -278,9 +247,7 @@ def train_validation_phase(
     }
 
 
-# ==============================================================================
 # Phase 2: Seed Diagnostics (Seeds 43–46, Pure Initialization Sensitivity)
-# ==============================================================================
 
 def run_seed_diagnostics(
     X_train: np.ndarray,
@@ -366,9 +333,7 @@ def run_seed_diagnostics(
     return summary
 
 
-# ==============================================================================
-# Phase 3: Final Model Refit on Combined TRAIN + VAL
-# ==============================================================================
+# Phase 3: Final Model Refit on Train + Validation
 
 def train_final_model(
     X_train_val: np.ndarray,
@@ -407,9 +372,7 @@ def train_final_model(
     return model, test_preds
 
 
-# ==============================================================================
-# Phase 4: Reports & Model Comparison
-# ==============================================================================
+# Phase 4: Final Comparison and Benchmark Assembly
 
 def compile_final_model_reports(
     lstm_test_records: List[Dict[str, Any]],
@@ -618,9 +581,7 @@ def compile_final_model_reports(
     return summary_dict
 
 
-# ==============================================================================
 # Main Step 7 Pipeline Entry Point
-# ==============================================================================
 
 def run_lstm_pipeline(
     data_dir: str = "data_model",
@@ -629,9 +590,7 @@ def run_lstm_pipeline(
     """
     Orchestrates the end-to-end Step 7 LSTM training and evaluation pipeline.
     """
-    print("=" * 75)
-    print("STEP 7: SMALL LSTM IMPLEMENTATION & FINAL BENCHMARK COMPARISON")
-    print("=" * 75)
+    print("Running Small LSTM training and benchmark comparison...")
 
     data = load_sequence_arrays(data_dir=data_dir)
     X_train, y_train = data["X_train"], data["y_train"]
@@ -738,7 +697,7 @@ def run_lstm_pipeline(
     print(f"Test Winner:                  {final_summary['test_winner']}")
     print(f"LSTM beats Persistence?       {final_summary['diagnostic_comparisons']['improvement_over_persistence']['lstm_beats_persistence_test']}")
     print(f"LSTM beats WSI-AR?            {final_summary['diagnostic_comparisons']['improvement_over_wsi_ar']['lstm_beats_wsi_ar_test']}")
-    print("=" * 75)
+    print(f"LSTM Test MAE:          {final_summary['lstm_test_result']['overall_mae']:.4f}")
     return final_summary
 
 

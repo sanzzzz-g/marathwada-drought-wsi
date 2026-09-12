@@ -1,37 +1,5 @@
 """
-src/pipeline.py
-===============
 Master orchestration pipeline for the Marathwada Drought Water Stress Index (WSI).
-
-Executes the exact 28-step implementation sequence:
- 1. Load raw six datasets
- 2. Structural validation
- 3. Normalize district names
- 4. Normalize dates
- 5. Freeze 2003-01 -> 2024-12
- 6. Build canonical 2,112-row district-month calendar
- 7. Split TRAIN / VALIDATION / TEST
- 8. Perform source-specific QC
- 9. Fit TRAIN-only imputation rules
-10. Transform missing values
-11. Build CHIRPS 3-month accumulation
-12. Fit TRAIN-only SPI parameters
-13. Generate SPI for all periods
-14. Build ERA5 soil-water anomaly
-15. Build NDVI anomaly
-16. Build LST anomaly
-17. Build groundwater qualifying observations
-18. Build groundwater as-of stress feature
-19. Build GWP surface-water anomaly
-20. Standardize all six stress components using TRAIN-only parameters
-21. Validate six-component polarity
-22. Calculate WSI
-23. Calculate WSI category
-24. Validate WSI mathematically
-25. Validate temporal leakage
-26. Validate groundwater causality
-27. Validate model/audit parity
-28. Export master + audit + model + parameters + validation report
 """
 
 from typing import Dict, Any, Optional
@@ -113,9 +81,7 @@ def run_pipeline(
     train_end = cfg["splits"]["row_level"]["train"]["end"]
     val_end = cfg["splits"]["row_level"]["validation"]["end"]
 
-    # -------------------------------------------------------------
-    # Step 1 - 4: Load raw six datasets, structural validation & normalization
-    # -------------------------------------------------------------
+    # Step 1 - 4: Load raw datasets, structural validation & normalization
     print("Step 1-4: Loading and structurally validating raw six datasets...")
     chirps_raw = load_raw_chirps(raw_cfg["chirps"])
     era5_raw = load_raw_era5land(raw_cfg["era5land"])
@@ -124,9 +90,7 @@ def run_pipeline(
     gwp_raw = load_raw_gwp(raw_cfg["gwp"])
     gw_raw = load_raw_groundwater(raw_cfg["groundwater"])
 
-    # -------------------------------------------------------------
-    # Step 5 - 6: Build canonical 2,112-row district-month calendar
-    # -------------------------------------------------------------
+    # Step 5 - 6: Build canonical rectangular calendar
     print("Step 5-6: Building canonical 2,112-row rectangular calendar (2003-01 to 2024-12)...")
     calendar_df = create_canonical_calendar(
         start_date=cfg["dates"]["canonical_start"],
@@ -134,9 +98,7 @@ def run_pipeline(
         districts=cfg["districts"],
     )
 
-    # -------------------------------------------------------------
-    # Step 7: Split TRAIN / VALIDATION / TEST row tags & forecast origins
-    # -------------------------------------------------------------
+    # Step 7: Split tags & forecast origins
     print("Step 7: Defining chronological split tags and forecast origins...")
     def assign_split(dt: pd.Timestamp) -> str:
         if dt <= pd.Timestamp(train_end):
@@ -163,9 +125,7 @@ def run_pipeline(
         (calendar_df["date"] >= "2021-01-01") & (calendar_df["date"] <= "2024-09-01")
     ).astype(int)
 
-    # -------------------------------------------------------------
-    # Step 8 - 10: Source-specific QC, TRAIN-only imputation rules, transform
-    # -------------------------------------------------------------
+    # Step 8 - 10: Source QC and train-only imputation
     print("Step 8-10: Performing source QC and TRAIN-only imputation...")
     # NDVI: Mask Parbhani July 2022 QA artifact
     ndvi_qc = apply_ndvi_source_qc(ndvi_raw)
@@ -184,9 +144,7 @@ def run_pipeline(
         lst_qc, val_col="lst_celsius", impute_stats=lst_impute_stats, flag_col_name="lst_imputed"
     )
 
-    # -------------------------------------------------------------
-    # Step 11 - 13: CHIRPS 3-month accumulation, TRAIN-only Gamma fit, SPI
-    # -------------------------------------------------------------
+    # Step 11 - 13: CHIRPS 3-month accumulation & SPI-3
     print("Step 11-13: Computing SPI-3 with 1981-2017 Gamma fitting & reference check...")
     chirps_acc = compute_chirps_rolling_accumulation(chirps_raw, window=3)
     spi_cal_start = cfg.get("spi", {}).get("calibration_start", "1981-01-01")
@@ -210,9 +168,7 @@ def run_pipeline(
         train_end_date=train_end,
     )
 
-    # -------------------------------------------------------------
-    # Step 14 - 16: ERA5 soil-water, NDVI, and LST multi-tier features
-    # -------------------------------------------------------------
+    # Step 14 - 16: Soil moisture, NDVI, and LST anomalies
     print("Step 14-16: Engineering ERA5, NDVI, and LST multi-tier features...")
     soil_df, soil_train_stats = process_soil_water_features(
         calendar_df=calendar_df,
@@ -230,9 +186,7 @@ def run_pipeline(
         train_end_date=train_end,
     )
 
-    # -------------------------------------------------------------
     # Step 17 - 18: Groundwater qualifying observations & causal as-of stress
-    # -------------------------------------------------------------
     print("Step 17-18: Performing empirical groundwater audit and causal stress propagation...")
     gw_clean = clean_groundwater_records(gw_raw)
     gw_agg = aggregate_district_monthly_groundwater(gw_clean, min_wells_threshold=min_wells)
@@ -268,9 +222,7 @@ def run_pipeline(
         staleness_threshold_months=staleness_thresh,
     )
 
-    # -------------------------------------------------------------
     # Step 19: Global WaterPack surface water anomaly
-    # -------------------------------------------------------------
     print("Step 19: Engineering GWP surface water features (cutoff verified)...")
     gwp_feat_df, gwp_train_stats = process_surface_water_features(
         calendar_df=calendar_df,
@@ -279,9 +231,7 @@ def run_pipeline(
         use_lag_1=use_gwp_lag_1,
     )
 
-    # -------------------------------------------------------------
     # Step 20 - 21: Assemble master dataframe & validate stress polarity
-    # -------------------------------------------------------------
     print("Step 20-21: Assembling multi-tier master dataframe and checking polarity...")
     master = calendar_df.copy()
 
@@ -349,15 +299,11 @@ def run_pipeline(
         on=["district", "date"],
     )
 
-    # -------------------------------------------------------------
-    # Step 22 - 24: Calculate WSI, WSI category, and validate mathematically
-    # -------------------------------------------------------------
+    # Step 22 - 24: Calculate WSI and discrete categories
     print("Step 22-24: Calculating equal-weighted WSI and discrete categories...")
     master = calculate_wsi(master, components=WSI_COMPONENT_COLS)
 
-    # -------------------------------------------------------------
-    # Step 25 - 27: Validate temporal leakage, causality, and parity
-    # -------------------------------------------------------------
+    # Step 25 - 27: Automated validation suite
     print("Step 25-27: Running rigorous automated validation suite...")
     # Generate the model subset directly from master
     model_cols = [
@@ -385,9 +331,7 @@ def run_pipeline(
     else:
         print("Validation PASSED across all 7 rigorous checks!")
 
-    # -------------------------------------------------------------
-    # Step 28: Export authoritative Parquet, Audit CSV, Model CSV, JSON stats
-    # -------------------------------------------------------------
+    # Step 28: Export outputs, metadata, and validation report
     print("Step 28: Exporting authoritative Parquet, Audit CSV, Model CSV, and metadata...")
     master_parquet_path = os.path.join(output_dir, cfg["outputs"]["master_parquet"])
     audit_csv_path = os.path.join(output_dir, cfg["outputs"]["master_audit_csv"])

@@ -1,16 +1,6 @@
 """
-src/spi.py
-==========
-Module for calculating Standardized Precipitation Index (SPI-3) using Gamma distribution,
-calibrated on the 1981-01 to 2017-12 historical record (WMO 30+ year standard),
-and producing both meteorological spi_3 and district-standardized spi_stress_z.
-
-Adheres to:
-- 3-month rolling accumulation: R_3m(t) = R(t) + R(t-1) + R(t-2) computed causally
-- Calibration period: 1981-01 to 2017-12 (36-37 samples per district-month)
-- Reference implementation verification test (SciPy / xclim equivalent)
-- Inversion and district-wise standardization: spi_stress = -spi_3,
-  standardized via TRAIN (2003-2017) district mean and std (ddof=0)
+Standardized Precipitation Index (SPI-3) calculation using Gamma distribution.
+Calibrated on historical CHIRPS data (1981-2017) and standardized per district.
 """
 
 from typing import Dict, Tuple, Any, Optional

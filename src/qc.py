@@ -1,14 +1,5 @@
 """
-src/qc.py
-=========
-Module for source-specific Quality Control (QC), artifact masking,
-and TRAIN-only missing value imputation.
-
-Adheres to:
-- Structural QC & artifact masking before imputation
-- TRAIN-only fitting: Imputation statistics computed ONLY from TRAIN period (2003-01 to 2017-12)
-- Zero temporal leakage: Imputation medians never see validation (2018-2020) or test (2021-2024) data
-- Full auditability: Exact raw values, imputation flags, and replacement values are preserved
+Source-specific Quality Control (QC), artifact masking, and train-only imputation.
 """
 
 from typing import Dict, Tuple

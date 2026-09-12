@@ -1,0 +1,20 @@
+{
+  "seed": 42,
+  "epochs": 3,
+  "batch_size": 32,
+  "shuffle": false,
+  "learning_rate_schedule": [
+    0.001,
+    0.001,
+    0.001
+  ],
+  "val_mae": 0.473812,
+  "val_mae_h1": 0.353839,
+  "val_mae_h2": 0.488363,
+  "val_mae_h3": 0.579234,
+  "val_rmse": 0.643163,
+  "val_rmse_h1": 0.461634,
+  "val_rmse_h2": 0.644989,
+  "val_rmse_h3": 0.782215,
+  "val_residual_mae": 0.473812
+}

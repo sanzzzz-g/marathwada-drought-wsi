@@ -1,25 +1,6 @@
 """
-src/groundwater.py
-==================
-Module for GSDA groundwater well cleaning, empirical coverage audit,
-sensitivity analysis across N thresholds, observation-month physical anomaly,
-causal as-of monthly feature propagation, and exact training as-of standardization.
-
-Implements:
-1. Well-level deduplication and conflicting-pair exclusion.
-2. Station aggregation to district-month median depth.
-3. Sensitivity audit across N thresholds (e.g. N >= 5, 10, 15).
-4. TRAIN-only climatology fitting: mu_GW(d, m_s) from 2003-2017 qualifying records.
-5. Observation-month physical anomaly:
-     gw_anomaly_m_bgl_s = GW_s - mu_GW(d, m_s)
-6. Causal as-of monthly feature propagation:
-     gw_anomaly_m_bgl_t = gw_anomaly_m_bgl_s (carried forward causally).
-7. Exact district-wise Z-standardization on the actual AS-OF training series (ddof=0):
-     GWStressZ_{d, t} = (gw_anomaly_m_bgl_{d, t} - mu_GW,d) / sigma_GW,d
-   Guaranteeing training mean = 0.0, training std = 1.0 for every district.
-8. Staleness contract:
-     0 - 3 months -> fresh (stale_flag = 0)
-     > 3 months   -> stale (stale_flag = 1, row retained, age tracked).
+GSDA groundwater data cleaning, district aggregation, causal monthly propagation,
+and district-wise Z-standardization.
 """
 
 from typing import Dict, List, Tuple, Optional, Any

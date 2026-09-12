@@ -1,0 +1,45 @@
+{
+  "experiment": "B",
+  "description": "6-feature small LSTM trained on residual targets r_{t,h} = WSI_{t+h} - WSI_t",
+  "input_shape": [
+    12,
+    6
+  ],
+  "target": "WSI(t+h) - WSI(t)",
+  "architecture": {
+    "lstm_units": 32,
+    "dropout": 0.2,
+    "dense_units": 16,
+    "output_units": 3
+  },
+  "training": {
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "loss": "Huber(delta=1.0)",
+    "batch_size": 32,
+    "max_epochs": 200,
+    "shuffle": false,
+    "seed": 42,
+    "monitor": "val_mae"
+  },
+  "validation_results": {
+    "best_epoch": 3,
+    "train_residual_mae": 0.366402,
+    "val_residual_mae": 0.473812,
+    "val_wsi_mae": 0.473812,
+    "val_wsi_mae_h1": 0.353839,
+    "val_wsi_mae_h2": 0.488363,
+    "val_wsi_mae_h3": 0.579234
+  },
+  "environment": {
+    "tensorflow_version": "2.21.0",
+    "numpy_version": "2.5.3",
+    "python_version": "3.13.7",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "device": [
+      "CPU"
+    ],
+    "seed": 42,
+    "deterministic_mode": true
+  }
+}

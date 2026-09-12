@@ -1,24 +1,6 @@
 """
-src/baselines.py
-================
-Step 6: Baseline Forecasting Suite for 3-Month Water Stress Index (WSI) Prediction.
-
-Implements five frozen baseline forecasters:
-1. PersistenceForecaster: Hat{Y}_t = [WSI_t, WSI_t, WSI_t]
-2. SeasonalPersistenceForecaster: Hat{WSI}_{t+h} = WSI_{t+h-12}
-3. WSIAutoregressiveForecaster: Univariate AR(12) on historical WSI trajectory
-4. RidgeForecaster: Multivariate flattened Ridge (72 features -> 3 outputs)
-5. XGBoostForecaster: Three independent horizon regressors (XGB_h1, XGB_h2, XGB_h3)
-
-Enforces:
-- Strict split isolation: Fit on TRAIN -> Tune on VAL -> Select champion on VAL -> Refit on TRAIN+VAL -> Evaluate once on TEST.
-- Deterministic Champion Selection:
-    Primary: min(mean validation MAE across h1, h2, h3)
-    Tie-breaker: min(mean validation RMSE across h1, h2, h3)
-- Output namespace separation:
-    results/validation_predictions.csv (4,320 rows)
-    results/baseline_predictions.csv   (5,400 rows)
-    results/baseline_summary.json
+Baseline forecasting models for 3-month multi-step WSI prediction.
+Implements Persistence, Seasonal Persistence, WSI-AR, Ridge, and XGBoost.
 """
 
 import os
@@ -33,9 +15,7 @@ from sklearn.linear_model import Ridge
 import xgboost as xgb
 
 
-# ==============================================================================
-# Abstract Base Forecaster Interface
-# ==============================================================================
+# Base forecaster interface
 
 class BaseForecaster(ABC):
     """Abstract base class for all 3-month multi-step WSI forecasters."""
@@ -67,9 +47,7 @@ class BaseForecaster(ABC):
         return self.fit(X_train_val, y_train_val, **kwargs)
 
 
-# ==============================================================================
 # Baseline 1: Persistence Forecaster
-# ==============================================================================
 
 class PersistenceForecaster(BaseForecaster):
     """
@@ -97,9 +75,7 @@ class PersistenceForecaster(BaseForecaster):
         return np.repeat(wsi_t, repeats=3, axis=1).astype(np.float32)
 
 
-# ==============================================================================
 # Baseline 2: Seasonal Persistence Forecaster
-# ==============================================================================
 
 class SeasonalPersistenceForecaster(BaseForecaster):
     """
@@ -161,9 +137,7 @@ class SeasonalPersistenceForecaster(BaseForecaster):
         return preds
 
 
-# ==============================================================================
-# Baseline 3: WSI Autoregression Forecaster (Univariate AR)
-# ==============================================================================
+# Baseline 3: Autoregressive Forecaster WSI-AR(12)
 
 class WSIAutoregressiveForecaster(BaseForecaster):
     """
@@ -241,9 +215,7 @@ class WSIAutoregressiveForecaster(BaseForecaster):
         return self.model.predict(W_scaled).astype(np.float32)
 
 
-# ==============================================================================
 # Baseline 4: Linear Multivariate Model (Ridge)
-# ==============================================================================
 
 class RidgeForecaster(BaseForecaster):
     """
@@ -316,9 +288,7 @@ class RidgeForecaster(BaseForecaster):
         return self.model.predict(X_scaled).astype(np.float32)
 
 
-# ==============================================================================
-# Baseline 5: Nonlinear Decoupled Tree Models (XGBoost)
-# ==============================================================================
+# Baseline 5: Gradient Boosted Trees Forecaster (XGBoost)
 
 class XGBoostForecaster(BaseForecaster):
     """
@@ -437,9 +407,7 @@ class XGBoostForecaster(BaseForecaster):
         return preds
 
 
-# ==============================================================================
-# Helper Functions: Data Loading & Long-Format Table Assembly
-# ==============================================================================
+# Data Loading & Long-Format Table Assembly
 
 def load_sequence_arrays(data_dir: str = "data_model") -> Dict[str, Any]:
     """Loads all pre-built Step-5 sequence arrays and metadata."""
@@ -503,9 +471,7 @@ def assemble_prediction_records(
     return records
 
 
-# ==============================================================================
 # Pipeline Execution & Champion Selection
-# ==============================================================================
 
 def run_baseline_suite(
     data_dir: str = "data_model",
@@ -540,11 +506,7 @@ def run_baseline_suite(
         XGBoostForecaster(),
     ]
 
-    print("=" * 70)
-    print("STEP 6: BASELINE FORECASTING SUITE & EVALUATION")
-    print(f"Data directory: {data_dir}")
-    print(f"Train samples:  {len(X_train)} | Val samples: {len(X_val)} | Test samples: {len(X_test)}")
-    print("=" * 70)
+    print(f"Running baseline forecasting suite (Train: {len(X_train)}, Val: {len(X_val)}, Test: {len(X_test)})")
 
     val_records: List[Dict[str, Any]] = []
     val_model_metrics: Dict[str, Dict[str, float]] = {}
