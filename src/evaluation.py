@@ -235,21 +235,30 @@ def run_evaluation_suite(
     # --------------------------------------------------------------------------
     # 1. Baseline Horizon & Overall Metrics (with Skill vs Persistence)
     # --------------------------------------------------------------------------
-    metrics_rows = []
     # Find persistence MAE for skill calculations
     persist_df = df[df["model"] == "Persistence"]
-    persist_mae_overall = np.mean(persist_df["absolute_error"])
-    persist_rmse_overall = np.sqrt(np.mean(persist_df["squared_error"]))
+    if len(persist_df) == 0 and os.path.exists("results/baselines/baseline_predictions.csv"):
+        base_df = pd.read_csv("results/baselines/baseline_predictions.csv")
+        persist_df = base_df[base_df["model"] == "Persistence"]
 
-    persist_mae_h = {
-        f"h{h}": np.mean(persist_df[persist_df["horizon"] == f"h{h}"]["absolute_error"])
-        for h in range(1, 4)
-    }
-    persist_rmse_h = {
-        f"h{h}": np.sqrt(np.mean(persist_df[persist_df["horizon"] == f"h{h}"]["squared_error"]))
-        for h in range(1, 4)
-    }
+    if len(persist_df) > 0:
+        persist_mae_overall = np.mean(persist_df["absolute_error"])
+        persist_rmse_overall = np.sqrt(np.mean(persist_df["squared_error"]))
+        persist_mae_h = {
+            f"h{h}": np.mean(persist_df[persist_df["horizon"] == f"h{h}"]["absolute_error"])
+            for h in range(1, 4)
+        }
+        persist_rmse_h = {
+            f"h{h}": np.sqrt(np.mean(persist_df[persist_df["horizon"] == f"h{h}"]["squared_error"]))
+            for h in range(1, 4)
+        }
+    else:
+        persist_mae_overall = 1.0
+        persist_rmse_overall = 1.0
+        persist_mae_h = {f"h{h}": 1.0 for h in range(1, 4)}
+        persist_rmse_h = {f"h{h}": 1.0 for h in range(1, 4)}
 
+    metrics_rows = []
     for model_name in models:
         m_df = df[df["model"] == model_name]
         y_true = m_df["actual_wsi"].values
@@ -292,9 +301,11 @@ def run_evaluation_suite(
         metrics_rows.append(row)
 
     metrics_df = pd.DataFrame(metrics_rows)
-    metrics_path = os.path.join(output_dir, "baseline_metrics.csv")
+    metrics_path = os.path.join(output_dir, "metrics.csv")
     metrics_df.to_csv(metrics_path, index=False)
-    print(f"\n1. Saved baseline metrics: {metrics_path}")
+    if "baselines" in output_dir:
+        metrics_df.to_csv(os.path.join(output_dir, "baseline_metrics.csv"), index=False)
+    print(f"\n1. Saved metrics: {metrics_path}")
 
     # --------------------------------------------------------------------------
     # 2. District-Level Metrics (all 8 districts)
@@ -434,17 +445,31 @@ def run_evaluation_suite(
     print(f"\nEvaluating statistical significance against top baseline: {champion}")
 
     sig_results = []
-    for cand in models:
-        if cand == champion:
-            continue
-        boot_res = moving_block_bootstrap_significance(
-            df=df,
-            candidate_model=cand,
-            champion_model=champion,
-            block_length=3,
-            n_boot=1000,
-        )
-        sig_results.append(boot_res)
+    if len(models) > 1:
+        for cand in models:
+            if cand == champion:
+                continue
+            boot_res = moving_block_bootstrap_significance(
+                df=df,
+                candidate_model=cand,
+                champion_model=champion,
+                block_length=3,
+                n_boot=1000,
+            )
+            sig_results.append(boot_res)
+    elif os.path.exists("results/baselines/baseline_predictions.csv"):
+        base_df = pd.read_csv("results/baselines/baseline_predictions.csv")
+        comb_df = pd.concat([df, base_df[base_df["model"].isin(["Persistence", "WSI_Autoregression"])]], ignore_index=True)
+        for comp_m in ["Persistence", "WSI_Autoregression"]:
+            if champion != comp_m:
+                boot_res = moving_block_bootstrap_significance(
+                    df=comb_df,
+                    candidate_model=champion,
+                    champion_model=comp_m,
+                    block_length=3,
+                    n_boot=1000,
+                )
+                sig_results.append(boot_res)
 
     sig_df = pd.DataFrame(sig_results)
     sig_path = os.path.join(output_dir, "significance_metrics.csv")

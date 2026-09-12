@@ -1,0 +1,3 @@
+candidate_model,champion_model,observed_mae_diff,ci_95_lower,ci_95_upper,bootstrap_p_value,significantly_different,candidate_is_better
+LSTM,Persistence,0.13947,0.01814,0.25494,0.016,True,False
+LSTM,WSI_Autoregression,0.05156,-0.04882,0.15887,0.41,False,False

@@ -1,0 +1,108 @@
+{
+  "baseline_champion_by_validation": "WSI_Autoregression",
+  "baseline_champion_validation_mae": 0.5404,
+  "lstm_validation_result": {
+    "best_epoch": 6,
+    "best_val_mae": 0.5173,
+    "best_val_mae_h1": 0.4115,
+    "best_val_mae_h2": 0.5256,
+    "best_val_mae_h3": 0.6148,
+    "selected_lr_schedule": [
+      0.0010000000474974513,
+      0.0010000000474974513,
+      0.0010000000474974513,
+      0.0010000000474974513,
+      0.0010000000474974513,
+      0.0010000000474974513
+    ],
+    "seed_robustness": {
+      "seeds_evaluated": [
+        42,
+        43,
+        44,
+        45,
+        46
+      ],
+      "all_seeds_val_mae": [
+        0.5173,
+        0.5192,
+        0.5432,
+        0.5421,
+        0.5288
+      ],
+      "mean_val_mae": 0.5301,
+      "std_val_mae": 0.0109,
+      "mean_val_mae_by_horizon": {
+        "h1": 0.4185,
+        "h2": 0.545,
+        "h3": 0.6269
+      },
+      "std_val_mae_by_horizon": {
+        "h1": 0.0125,
+        "h2": 0.0164,
+        "h3": 0.0113
+      }
+    }
+  },
+  "lstm_test_result": {
+    "overall_mae": 0.5583,
+    "mae_h1": 0.4258,
+    "mae_h2": 0.565,
+    "mae_h3": 0.6841,
+    "overall_rmse": 0.726,
+    "overall_r2": -1.1833
+  },
+  "test_winner": "Persistence",
+  "test_winner_mae": 0.4188,
+  "diagnostic_comparisons": {
+    "persistence_benchmark": {
+      "overall_mae": 0.4188,
+      "mae_h1": 0.3314,
+      "mae_h2": 0.4379,
+      "mae_h3": 0.4872
+    },
+    "wsi_ar_champion": {
+      "overall_mae": 0.5068,
+      "mae_h1": 0.36,
+      "mae_h2": 0.5128,
+      "mae_h3": 0.6475
+    },
+    "improvement_over_persistence": {
+      "overall_delta_mae": -0.1395,
+      "overall_skill_pct": -33.31,
+      "h1_delta_mae": -0.0944,
+      "h1_skill_pct": -28.49,
+      "h2_delta_mae": -0.1271,
+      "h2_skill_pct": -29.02,
+      "h3_delta_mae": -0.1969,
+      "h3_skill_pct": -40.41,
+      "lstm_beats_persistence_test": false
+    },
+    "improvement_over_wsi_ar": {
+      "overall_delta_mae": -0.0515,
+      "overall_skill_pct": -10.16,
+      "h1_delta_mae": -0.0658,
+      "h1_skill_pct": -18.28,
+      "h2_delta_mae": -0.0522,
+      "h2_skill_pct": -10.18,
+      "h3_delta_mae": -0.0366,
+      "h3_skill_pct": -5.65,
+      "lstm_beats_wsi_ar_test": false
+    }
+  },
+  "reproducibility": {
+    "framework": "tensorflow 2.21.0",
+    "primary_seed": 42,
+    "diagnostic_seeds": [
+      42,
+      43,
+      44,
+      45,
+      46
+    ],
+    "op_determinism_enabled": true,
+    "shuffle": false,
+    "lr_schedule_replayed": true,
+    "stopping_metric": "val_mae"
+  }
+}
