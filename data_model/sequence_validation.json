@@ -1,0 +1,41 @@
+{
+  "lookback_months": 12,
+  "horizon_months": 3,
+  "train_sequences": 1328,
+  "validation_sequences": 288,
+  "test_sequences": 360,
+  "total_sequences": 1976,
+  "train_shape": [
+    1328,
+    12,
+    6
+  ],
+  "validation_shape": [
+    288,
+    12,
+    6
+  ],
+  "test_shape": [
+    360,
+    12,
+    6
+  ],
+  "target_shapes": {
+    "train": [
+      1328,
+      3
+    ],
+    "validation": [
+      288,
+      3
+    ],
+    "test": [
+      360,
+      3
+    ]
+  },
+  "districts": 8,
+  "district_balance": true,
+  "temporal_continuity": true,
+  "target_after_input": true
+}

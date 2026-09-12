@@ -63,4 +63,6 @@ organize_repo.py
 # Notebooks (excluded from GitHub)
 notebooks/
 
-
+# Large model tensors (numpy arrays)
+data_model/*.npy
+*.npy
