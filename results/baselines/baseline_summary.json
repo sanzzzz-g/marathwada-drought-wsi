@@ -1,0 +1,101 @@
+{
+  "models": [
+    "Persistence",
+    "Seasonal_Persistence",
+    "WSI_Autoregression",
+    "Ridge_Regression",
+    "XGBoost"
+  ],
+  "champion_baseline": {
+    "name": "WSI_Autoregression",
+    "selection_criteria": "min(mean_val_mae) on VALIDATION with mean_val_rmse tie-breaker",
+    "validation_scores": {
+      "val_mae_h1": 0.33513,
+      "val_mae_h2": 0.46378,
+      "val_mae_h3": 0.55643,
+      "mean_val_mae": 0.45178,
+      "mean_val_rmse": 0.61177
+    },
+    "test_scores": {
+      "test_mae_h1": 0.35997,
+      "test_mae_h2": 0.51279,
+      "test_mae_h3": 0.6475,
+      "mean_test_mae": 0.50675,
+      "mean_test_rmse": 0.63765
+    }
+  },
+  "all_validation_metrics": {
+    "Persistence": {
+      "val_mae_h1": 0.37589,
+      "val_mae_h2": 0.5357,
+      "val_mae_h3": 0.64862,
+      "mean_val_mae": 0.52007,
+      "mean_val_rmse": 0.69213
+    },
+    "Seasonal_Persistence": {
+      "val_mae_h1": 1.14745,
+      "val_mae_h2": 1.14674,
+      "val_mae_h3": 1.15265,
+      "mean_val_mae": 1.14895,
+      "mean_val_rmse": 1.41056
+    },
+    "WSI_Autoregression": {
+      "val_mae_h1": 0.33513,
+      "val_mae_h2": 0.46378,
+      "val_mae_h3": 0.55643,
+      "mean_val_mae": 0.45178,
+      "mean_val_rmse": 0.61177
+    },
+    "Ridge_Regression": {
+      "val_mae_h1": 0.36897,
+      "val_mae_h2": 0.53182,
+      "val_mae_h3": 0.65799,
+      "mean_val_mae": 0.51959,
+      "mean_val_rmse": 0.68649
+    },
+    "XGBoost": {
+      "val_mae_h1": 0.39449,
+      "val_mae_h2": 0.54353,
+      "val_mae_h3": 0.65767,
+      "mean_val_mae": 0.5319,
+      "mean_val_rmse": 0.66744
+    }
+  },
+  "all_test_metrics": {
+    "Persistence": {
+      "test_mae_h1": 0.3314,
+      "test_mae_h2": 0.43794,
+      "test_mae_h3": 0.4872,
+      "mean_test_mae": 0.41884,
+      "mean_test_rmse": 0.5488
+    },
+    "Seasonal_Persistence": {
+      "test_mae_h1": 0.5697,
+      "test_mae_h2": 0.58157,
+      "test_mae_h3": 0.58555,
+      "mean_test_mae": 0.57894,
+      "mean_test_rmse": 0.72852
+    },
+    "WSI_Autoregression": {
+      "test_mae_h1": 0.35997,
+      "test_mae_h2": 0.51279,
+      "test_mae_h3": 0.6475,
+      "mean_test_mae": 0.50675,
+      "mean_test_rmse": 0.63765
+    },
+    "Ridge_Regression": {
+      "test_mae_h1": 0.38269,
+      "test_mae_h2": 0.57649,
+      "test_mae_h3": 0.72921,
+      "mean_test_mae": 0.5628,
+      "mean_test_rmse": 0.7452
+    },
+    "XGBoost": {
+      "test_mae_h1": 0.42332,
+      "test_mae_h2": 0.56207,
+      "test_mae_h3": 0.72563,
+      "mean_test_mae": 0.57034,
+      "mean_test_rmse": 0.712
+    }
+  }
+}
