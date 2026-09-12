@@ -1,0 +1,66 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Byte-compiled / optimized / cache files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# IDE and Editor configurations
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Operating System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Large temporary/archive files
+archive/
+
+# Raw source datasets (tracked via data/README.md and data/sample/)
+data/*.csv
+!data/sample/
+!data/sample/*.csv
+
+# Tests (local verification only, excluded from GitHub)
+tests/
+pytest.ini
+
+# Housekeeping / local migration scripts
+organize_repo.py
+
+# Notebooks (excluded from GitHub)
+notebooks/
+
+

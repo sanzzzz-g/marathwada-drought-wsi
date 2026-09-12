@@ -1,0 +1,49 @@
+variable,district,start_year,end_year,years_count,theil_sen_slope,kendall_tau,mann_kendall_z,p_value,trend_direction
+CHIRPS Rainfall (mm/yr),Beed,1981,2026,46,0.23095,0.0995,0.97,0.3342,No Significant Trend
+CHIRPS Rainfall (mm/yr),Chhatrapati Sambhajinagar,1981,2026,46,0.32144,0.2019,1.97,0.0489,Significant Increase
+CHIRPS Rainfall (mm/yr),Dharashiv,1981,2026,46,0.12082,0.0551,0.53,0.596,No Significant Trend
+CHIRPS Rainfall (mm/yr),Hingoli,1981,2026,46,0.15526,0.0725,0.7,0.4835,No Significant Trend
+CHIRPS Rainfall (mm/yr),Jalna,1981,2026,46,0.21745,0.1362,1.33,0.185,No Significant Trend
+CHIRPS Rainfall (mm/yr),Latur,1981,2026,46,0.10017,0.0415,0.4,0.6909,No Significant Trend
+CHIRPS Rainfall (mm/yr),Nanded,1981,2026,46,0.17499,0.0667,0.64,0.5197,No Significant Trend
+CHIRPS Rainfall (mm/yr),Parbhani,1981,2026,46,0.17229,0.0841,0.81,0.4155,No Significant Trend
+ERA5 Soil Water Storage (mm/yr),Beed,2000,2026,27,5.00914,0.4815,3.5,0.0005,Significant Increase
+ERA5 Soil Water Storage (mm/yr),Chhatrapati Sambhajinagar,2000,2026,27,5.18866,0.4872,3.54,0.0004,Significant Increase
+ERA5 Soil Water Storage (mm/yr),Dharashiv,2000,2026,27,3.87476,0.4188,3.04,0.0023,Significant Increase
+ERA5 Soil Water Storage (mm/yr),Hingoli,2000,2026,27,3.03941,0.339,2.46,0.0139,Significant Increase
+ERA5 Soil Water Storage (mm/yr),Jalna,2000,2026,27,5.20357,0.4701,3.42,0.0006,Significant Increase
+ERA5 Soil Water Storage (mm/yr),Latur,2000,2026,27,4.66459,0.4017,2.92,0.0035,Significant Increase
+ERA5 Soil Water Storage (mm/yr),Nanded,2000,2026,27,4.14056,0.453,3.29,0.001,Significant Increase
+ERA5 Soil Water Storage (mm/yr),Parbhani,2000,2026,27,3.95195,0.4359,3.17,0.0015,Significant Increase
+MOD13Q1 NDVI (units/yr),Beed,2000,2025,26,0.00435,0.5323,3.79,0.0001,Significant Increase
+MOD13Q1 NDVI (units/yr),Chhatrapati Sambhajinagar,2000,2025,26,0.00509,0.6615,4.72,0.0,Significant Increase
+MOD13Q1 NDVI (units/yr),Dharashiv,2000,2025,26,0.00435,0.5631,4.01,0.0001,Significant Increase
+MOD13Q1 NDVI (units/yr),Hingoli,2000,2025,26,0.00268,0.4708,3.35,0.0008,Significant Increase
+MOD13Q1 NDVI (units/yr),Jalna,2000,2025,26,0.00507,0.6308,4.5,0.0,Significant Increase
+MOD13Q1 NDVI (units/yr),Latur,2000,2025,26,0.0028,0.4031,2.87,0.0042,Significant Increase
+MOD13Q1 NDVI (units/yr),Nanded,2000,2025,26,0.00232,0.5077,3.61,0.0003,Significant Increase
+MOD13Q1 NDVI (units/yr),Parbhani,2000,2025,26,0.00335,0.4277,3.04,0.0024,Significant Increase
+MOD11A2 LST (deg C/yr),Beed,2000,2025,26,-0.19934,-0.5508,-3.92,0.0001,Significant Decrease
+MOD11A2 LST (deg C/yr),Chhatrapati Sambhajinagar,2000,2025,26,-0.20976,-0.6923,-4.94,0.0,Significant Decrease
+MOD11A2 LST (deg C/yr),Dharashiv,2000,2025,26,-0.21305,-0.5938,-4.23,0.0,Significant Decrease
+MOD11A2 LST (deg C/yr),Hingoli,2000,2025,26,-0.17657,-0.5323,-3.79,0.0001,Significant Decrease
+MOD11A2 LST (deg C/yr),Jalna,2000,2025,26,-0.20968,-0.68,-4.85,0.0,Significant Decrease
+MOD11A2 LST (deg C/yr),Latur,2000,2025,26,-0.15489,-0.5323,-3.79,0.0001,Significant Decrease
+MOD11A2 LST (deg C/yr),Nanded,2000,2025,26,-0.13741,-0.52,-3.7,0.0002,Significant Decrease
+MOD11A2 LST (deg C/yr),Parbhani,2000,2025,26,-0.19468,-0.6308,-4.5,0.0,Significant Decrease
+GWP Surface Water Freq (units/yr),Beed,2003,2024,22,-0.00091,-0.0909,-0.56,0.5728,No Significant Trend
+GWP Surface Water Freq (units/yr),Chhatrapati Sambhajinagar,2003,2024,22,-0.00064,-0.013,-0.06,0.955,No Significant Trend
+GWP Surface Water Freq (units/yr),Dharashiv,2003,2024,22,-0.00114,-0.039,-0.23,0.8215,No Significant Trend
+GWP Surface Water Freq (units/yr),Hingoli,2003,2024,22,0.00056,0.0303,0.17,0.8656,No Significant Trend
+GWP Surface Water Freq (units/yr),Jalna,2003,2024,22,0.00534,0.368,2.37,0.0179,Significant Increase
+GWP Surface Water Freq (units/yr),Latur,2003,2024,22,0.00115,0.0909,0.56,0.5728,No Significant Trend
+GWP Surface Water Freq (units/yr),Nanded,2003,2024,22,0.0004,0.0736,0.45,0.6519,No Significant Trend
+GWP Surface Water Freq (units/yr),Parbhani,2003,2024,22,0.00082,0.0909,0.56,0.5728,No Significant Trend
+Groundwater Depth (m/yr),Beed,1973,2025,53,0.01784,0.1916,2.02,0.0437,Significant Increase
+Groundwater Depth (m/yr),Chhatrapati Sambhajinagar,1974,2025,52,0.03442,0.2345,2.45,0.0144,Significant Increase
+Groundwater Depth (m/yr),Dharashiv,1974,2025,52,-0.01146,-0.0882,-0.92,0.36,No Significant Trend
+Groundwater Depth (m/yr),Hingoli,1989,2025,37,0.0196,0.1862,1.61,0.1077,No Significant Trend
+Groundwater Depth (m/yr),Jalna,1974,2025,52,0.02161,0.227,2.37,0.0179,Significant Increase
+Groundwater Depth (m/yr),Latur,1973,2025,53,-0.04216,-0.2997,-3.16,0.0016,Significant Decrease
+Groundwater Depth (m/yr),Nanded,1973,2025,53,0.0261,0.3534,3.73,0.0002,Significant Increase
+Groundwater Depth (m/yr),Parbhani,1974,2025,52,0.01027,0.0935,0.97,0.3317,No Significant Trend

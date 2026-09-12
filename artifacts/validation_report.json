@@ -1,0 +1,65 @@
+{
+  "overall_status": "PASSED",
+  "calendar_and_shape": {
+    "check": "calendar_and_shape",
+    "passed": true,
+    "districts_match": true,
+    "total_rows": 2112,
+    "expected_rows": 2112,
+    "unique_dates_count": 264,
+    "duplicate_keys": 0,
+    "min_date": "2003-01-01",
+    "max_date": "2024-12-01"
+  },
+  "zero_nulls": {
+    "check": "zero_nulls_in_required_cols",
+    "passed": true,
+    "null_counts": {
+      "spi_stress_z": 0,
+      "soil_stress_z": 0,
+      "ndvi_stress_z": 0,
+      "lst_stress_z": 0,
+      "groundwater_stress_z": 0,
+      "surface_water_stress_z": 0,
+      "wsi": 0
+    },
+    "total_nulls": 0
+  },
+  "wsi_mathematical_exactness": {
+    "check": "wsi_mathematical_exactness",
+    "passed": true,
+    "max_discrepancy": 0.0,
+    "tolerance": 1e-12
+  },
+  "forecast_origin_splits": {
+    "check": "forecast_origin_splits",
+    "passed": true,
+    "train_rows": 1440,
+    "val_rows": 288,
+    "test_rows": 384,
+    "last_train_origin": "2017-09-01",
+    "first_val_origin": "2018-01-01",
+    "first_test_origin": "2021-01-01",
+    "last_train_targets_inside_train": true
+  },
+  "groundwater_causality": {
+    "check": "groundwater_causality_and_staleness",
+    "passed": true,
+    "future_observations_count": 0,
+    "negative_age_count": 0,
+    "stale_flag_mismatches": 0
+  },
+  "historical_events": {
+    "check": "historical_events",
+    "passed": true,
+    "latur_aug_2015_wsi": 1.8889040507530188,
+    "latur_aug_2015_category": "Severe Stress",
+    "legacy_negative_bug_absent": true
+  },
+  "model_audit_parity": {
+    "check": "model_audit_parity",
+    "passed": true,
+    "shared_columns_checked": 17,
+    "mismatches": {}
+  }
+}

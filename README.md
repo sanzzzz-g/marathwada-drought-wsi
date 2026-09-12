@@ -1,529 +1,211 @@
+# Marathwada Water Stress Index (WSI) Dataset and Pipeline
 
+A spatiotemporal data engineering pipeline and benchmark dataset for monthly drought monitoring and multi-step water stress forecasting across the eight administrative districts of the Marathwada region in Maharashtra, India (2003–2024).
 
-````markdown
-# Marathwada Drought Early Warning & Water Stress Index (WSI)
-
-A data-driven drought monitoring and early-warning pipeline for the Marathwada region of Maharashtra, India.
-
-This project integrates rainfall, soil water, vegetation, land-surface temperature, surface-water, and groundwater observations to construct a monthly Water Stress Index (WSI) for eight districts from 2003–2024.
+The pipeline ingests six raw hydroclimatic data streams, enforces strict chronological separation to prevent temporal data leakage, and generates a leak-free 2,112-observation rectangular panel formatted for sequence forecasting models (e.g., LSTM, Transformer).
 
 ---
 
-## 🌍 Study Region
+## Study Area and Spatiotemporal Scope
 
-The analysis covers eight districts of Marathwada:
-
-- Beed
-- Chhatrapati Sambhajinagar
-- Dharashiv
-- Hingoli
-- Jalna
-- Latur
-- Nanded
-- Parbhani
-
-### Study Period
-
-**January 2003 – December 2024**
-
-- 8 districts
-- 264 months
-- 2,112 district-month observations
+- **Region**: Marathwada, Maharashtra, India
+- **Districts (8)**: Beed, Chhatrapati Sambhajinagar, Dharashiv, Hingoli, Jalna, Latur, Nanded, Parbhani
+- **Historical Alias Mapping**:
+  - `Bid` &rarr; `Beed`
+  - `Aurangabad` &rarr; `Chhatrapati Sambhajinagar`
+  - `Osmanabad` &rarr; `Dharashiv`
+- **Temporal Coverage**: January 2003 to December 2024 (264 months)
+- **Panel Structure**: Balanced rectangular grid of 2,112 rows ($8 \text{ districts} \times 264 \text{ months}$) on unique primary key `(district, date)`.
 
 ---
 
-## 🎯 Project Objective
+## Data Sources
 
-The objective of this project is to integrate multiple environmental and hydrological indicators into a unified Water Stress Index (WSI) for characterizing historical drought and water-stress conditions across Marathwada.
+Features are derived from six remote sensing and ground monitoring datasets:
 
-The resulting dataset provides a foundation for future drought early-warning and time-series forecasting models.
+| Domain | Source | Raw Variable | Native Resolution | Aggregation |
+| :--- | :--- | :--- | :--- | :--- |
+| **Precipitation** | CHIRPS v2.0 | `rainfall_mm` | 0.05° (~5.5 km) | District monthly total |
+| **Root-Zone Soil Moisture** | ERA5-Land | Layers 1–4 ($0\text{--}289\text{ cm}$) | 0.1° (~9 km) | Depth-weighted storage (mm) |
+| **Vegetation Condition** | MODIS MOD13Q1 | `ndvi` | 250 m (16-day) | Monthly district mean |
+| **Land Surface Temperature** | MODIS MOD11A2 | `lst_celsius` | 1 km (8-day) | Monthly daytime mean |
+| **Surface Water Extent** | Global WaterPack | `surface_water_frequency` | 250 m (daily) | Monthly surface water fraction |
+| **Groundwater Depth** | GSDA Monitoring Network | `water_level_m_bgl` | ~1,000+ well stations | District median depth-to-water |
 
-The pipeline uses chronological data splitting and training-period-only transformation parameters to reduce temporal data leakage in machine-learning applications.
-
----
-
-## 🛰️ Data Sources
-
-The pipeline integrates six environmental and hydrological data streams:
-
-| Data Source | Variable | Processing |
-|---|---|---|
-| CHIRPS | Rainfall | SPI-3 |
-| ERA5-Land | Soil water storage (0–289 cm) | Soil-moisture anomaly |
-| MOD13Q1 | NDVI | NDVI anomaly |
-| MOD11A2 | Land Surface Temperature | LST anomaly |
-| Global WaterPack | Surface-water frequency | Surface-water anomaly |
-| GSDA | Groundwater level | Groundwater anomaly |
+Detailed download URLs, Google Earth Engine extraction scripts, and column schemas are documented in [`data/README.md`](data/README.md).
 
 ---
 
-## 🔄 Overall Processing Pipeline
+## Methodology and Feature Engineering
 
-```text
-                    Raw Environmental Data
-                             |
-        +--------------------+--------------------+
-        |                    |                    |
-     CHIRPS               ERA5-Land          MOD13Q1
-     Rainfall             Soil Water             NDVI
-        |                    |                    |
-      SPI-3            Soil Moisture          NDVI
-                         Anomaly              Anomaly
-        |                    |                    |
-        +--------------------+--------------------+
-                             |
-                    +--------+--------+
-                    |                 |
-                 MOD11A2         Global WaterPack
-                    |                 |
-                   LST          Surface Water
-                 Anomaly           Anomaly
-                    |                 |
-                    +--------+--------+
-                             |
-                         GSDA
-                      Groundwater
-                             |
-                     As-of Processing
-                             |
-                             v
-                  Six WSI Components
-                             |
-                             v
-                    Feature Scaling
-                             |
-                             v
-                    Water Stress Index
-                             |
-                             v
-                    WSI Classification
-````
+### Order of Operations and Split Isolation
 
----
+To guarantee that no future or holdout information leaks into preprocessing:
+1. **Structural Quality Control**: Format normalization, date validation, and alias resolution are performed prior to splitting.
+2. **Chronological Splitting**: The dataset is partitioned into Train (2003–2017), Validation (2018–2020), and Test (2021–2024).
+3. **Train-Only Statistical Calibration**: All climatological means, standard deviations, imputation medians, and distribution parameters are fitted strictly on training data ($\le 2017\text{-}12$).
+4. **Causal Forward Transformation**: Validation and test sets are transformed using the fixed training baselines.
 
-## 🧮 Methodology
+### Multi-Tier Hydroclimatic Stress Components
 
-### 1. SPI-3
+Each of the six dimensions is transformed into a standardized stress anomaly $z \in \mathbb{R}$ where **positive values indicate drought stress** and **negative values indicate surplus moisture**:
 
-Three-month accumulated CHIRPS rainfall is used to calculate the Standardized Precipitation Index (SPI-3).
+1. **Meteorological Deficit ($z_{\text{spi}}$)**:
+   - Evaluated using 3-month accumulated precipitation ($R_{3m}(t) = \sum_{k=0}^2 R(t-k)$).
+   - Fitted with a two-parameter Gamma distribution calibrated over a 37-year baseline (1981–2017; ~36–37 samples per district-month), satisfying WMO standard climatological guidelines.
+   - Standardized per district on training records with $\text{ddof}=0$ and inverted so that lower precipitation yields positive stress ($z_{\text{spi}} = -\text{SPI}_3$).
 
-The SPI distribution parameters are fitted separately by district and calendar month using the training period and then applied unchanged to the validation and test periods.
+2. **Soil Moisture Deficit ($z_{\text{soil}}$)**:
+   - Root-zone soil water storage integrated across all four ERA5-Land layers:
+     $$S = 70\,\theta_1 + 210\,\theta_2 + 720\,\theta_3 + 1890\,\theta_4 \quad (\text{mm})$$
+   - Physical anomaly computed relative to the training monthly climatology $\mu_{\text{soil}}(d, m)$.
+   - Standardized per district on training records ($z_{\text{soil}} = -\text{anomaly} / \sigma_{\text{train}}$).
 
-Lower SPI values represent greater rainfall-related stress.
+3. **Vegetation Health Deficit ($z_{\text{ndvi}}$)**:
+   - Sensor artifact in Parbhani (July 2022 cloud QA failure) is masked and imputed using the training climatological median for Parbhani in July.
+   - Standardized against training monthly baseline ($z_{\text{ndvi}} = -\text{anomaly} / \sigma_{\text{train}}$).
 
-### 2. Soil Moisture Anomaly
+4. **Thermal Stress ($z_{\text{lst}}$)**:
+   - Daytime land surface temperature anomaly computed relative to training monthly climatology $\mu_{\text{lst}}(d, m)$.
+   - High surface temperature indicates evaporative demand and thermal stress ($z_{\text{lst}} = +\text{anomaly} / \sigma_{\text{train}}$).
 
-ERA5-Land soil water storage for the 0–289 cm soil profile is transformed into a district- and calendar-month anomaly.
+5. **Groundwater Stress ($z_{\text{gw}}$)**:
+   - Minimum sample threshold of $N \ge 10$ active wells per district-month is required for an observation round to qualify.
+   - Physical anomaly is computed at the observation month $s$: $\Delta GW_s = GW_s - \mu_{GW}(d, m_s)$.
+   - For unobserved subsequent months $t > s$, the anomaly is carried forward causally ($\Delta GW_t = \Delta GW_s$), preventing seasonal step jumps.
+   - Standardized directly on the monthly as-of training series ($\mu_{\text{train}} = 0.000$, $\sigma_{\text{train}} = 1.000$, $\text{ddof}=0$) to preserve equal weighting with continuous streams.
+   - Observation age $\Delta t = t - s$ is tracked; $\Delta t > 3$ months flags a stale reading (`groundwater_stale_flag = 1`).
 
-Lower-than-normal soil water storage represents greater water stress.
+6. **Surface Water Deficit ($z_{\text{sw}}$)**:
+   - Surface water frequency anomaly computed relative to training monthly baseline $\mu_{\text{sw}}(d, m)$.
+   - Standardized per district on training records ($z_{\text{sw}} = -\text{anomaly} / \sigma_{\text{train}}$).
 
-### 3. NDVI Anomaly
+### Water Stress Index (WSI)
 
-MOD13Q1 NDVI is transformed into a district- and calendar-month anomaly.
+The composite index is computed as the unweighted mean of the six standardized stress dimensions:
 
-Lower-than-normal NDVI represents greater vegetation stress associated with reduced water availability.
+$$\text{WSI}_{d, t} = \frac{1}{6} \left( z_{\text{spi}} + z_{\text{soil}} + z_{\text{ndvi}} + z_{\text{lst}} + z_{\text{gw}} + z_{\text{sw}} \right)_{d, t}$$
 
-### 4. LST Anomaly
+Because each component is calibrated to unit variance ($\sigma_{\text{train}} = 1.000$) on the training set, each environmental indicator contributes equally to the composite index.
 
-MOD11A2 land-surface temperature is transformed into a district- and calendar-month anomaly.
-
-Higher-than-normal LST represents greater water stress.
-
-### 5. Surface Water Anomaly
-
-Global WaterPack surface-water frequency is transformed into a district- and calendar-month anomaly.
-
-Lower-than-normal surface-water frequency represents greater water stress.
-
-### 6. Groundwater Anomaly
-
-Groundwater observations are irregular rather than strictly monthly.
-
-For every district-month, the pipeline uses the most recent groundwater observation available at or before that month:
-
-```text
-GW_as_of(t) =
-most recent groundwater observation at or before month t
-```
-
-The groundwater processing also retains:
-
-* groundwater observation date
-* months since the last groundwater observation
-* number of wells contributing to the observation
-
-This prevents future groundwater observations from being used to construct earlier observations.
+| Stress Category | WSI Range | Physical Interpretation |
+| :--- | :--- | :--- |
+| **Very Wet** | $\text{WSI} < -1.5$ | Severe moisture excess / flood potential |
+| **Wet** | $-1.5 \le \text{WSI} < -0.5$ | Above-normal moisture availability |
+| **Normal** | $-0.5 \le \text{WSI} < 0.5$ | Near-climatological average conditions |
+| **Moderate Stress** | $0.5 \le \text{WSI} < 1.5$ | Significant soil moisture and hydrological deficit |
+| **Severe Stress** | $\text{WSI} \ge 1.5$ | Severe meteorological and hydrological drought |
 
 ---
 
-## 🧹 Data Quality Control
+## Sequence Forecasting Formulation
 
-The pipeline includes quality-control procedures for:
+The dataset is structured for rolling-origin sequence models (e.g., LSTM, GRU, Temporal Fusion Transformer):
 
-* Missing satellite observations
-* District-calendar-month climatological filling
-* Groundwater irregular sampling
-* Duplicate well-date observations
-* Groundwater as-of temporal alignment
-* Satellite quality-control inspection
-* District-month completeness
-* Duplicate district-date detection
-* Chronological train/validation/test checks
-* Final reproducibility checks
+- **Input Window ($X_t$)**: 12 consecutive months of the six continuous standardized features:
+  $$X_t \in \mathbb{R}^{12 \times 6}$$
+- **Forecast Horizon ($Y_t$)**: Continuous WSI targets for 1-, 2-, and 3-month lead times:
+  $$Y_t = \left[ \text{WSI}_{t+1},\, \text{WSI}_{t+2},\, \text{WSI}_{t+3} \right] \in \mathbb{R}^3$$
+- **Information Cutoff**: Month-end semantics ($X_t$ uses observations through the final day of month $t$; $Y_t$ predicts months $t+1, t+2, t+3$).
 
-A quality-control correction was applied to the Parbhani July 2022 NDVI observation after identifying an anomalous QA artifact.
+### Partition Boundaries
 
----
+| Partition | Date Range | Months | Rows | Forecast Origin Bounds |
+| :--- | :--- | :--- | :--- | :--- |
+| **Training** | 2003-01 to 2017-12 | 180 | 1,440 | Last origin: `2017-09` (targets Oct, Nov, Dec 2017 $\le$ 2017-12) |
+| **Validation** | 2018-01 to 2020-12 | 36 | 288 | Origins: `2018-01` to `2020-09` |
+| **Testing** | 2021-01 to 2024-12 | 48 | 384 | Origins: `2021-01` to `2024-09` |
 
-## 📊 Temporal Train / Validation / Test Split
-
-A chronological split is used to preserve the temporal structure of the dataset and avoid temporal leakage.
-
-| Dataset    | Period        |      Rows |
-| ---------- | ------------- | --------: |
-| Training   | 2003–2017     |     1,440 |
-| Validation | 2018–2020     |       288 |
-| Test       | 2021–2024     |       384 |
-| **Total**  | **2003–2024** | **2,112** |
-
-There is no date overlap between the training, validation, and test datasets.
-
-### Train-Only Transformation
-
-Feature transformation parameters are fitted using the training period only and then applied unchanged to validation and test data.
-
-This includes:
-
-* SPI distribution parameters
-* District-calendar-month anomaly baselines
-* Feature standardization parameters
+Zero target values from training forecast origins cross into the validation or testing periods.
 
 ---
 
-## 📈 Final Model Features
-
-The final model dataset contains six stress-oriented features:
-
-```text
-spi_3
-soil_moisture_anomaly
-ndvi_anomaly
-lst_anomaly
-surface_water_anomaly
-groundwater_anomaly
-```
-
-### Stress Orientation
-
-| Component     | Greater Stress             |
-| ------------- | -------------------------- |
-| SPI-3         | Lower rainfall / lower SPI |
-| Soil moisture | Lower soil moisture        |
-| NDVI          | Lower NDVI                 |
-| LST           | Higher LST                 |
-| Surface water | Lower surface water        |
-| Groundwater   | Greater groundwater depth  |
-
----
-
-## 🧮 Water Stress Index (WSI)
-
-The Water Stress Index is constructed from the six standardized stress-oriented components.
-
-Equal weighting is used because no externally specified component weights were provided.
-
-```text
-WSI =
-mean(
-    SPI stress,
-    Soil Moisture stress,
-    NDVI stress,
-    LST stress,
-    Surface Water stress,
-    Groundwater stress
-)
-```
-
-Higher WSI values indicate greater water stress.
-
----
-
-## 🚨 WSI Categories
-
-The project uses the following project-defined WSI categories:
-
-|        WSI Range | Category        |
-| ---------------: | --------------- |
-|         `< -1.5` | Very Wet        |
-| `-1.5 to < -0.5` | Wet             |
-|  `-0.5 to < 0.5` | Normal          |
-|   `0.5 to < 1.5` | Moderate Stress |
-|         `>= 1.5` | Severe Stress   |
-
-These thresholds are project-defined classification rules and are not presented as a universal externally validated drought standard.
-
----
-
-## 🗂️ Final Dataset
-
-The final model dataset contains:
-
-```text
-district
-date
-spi_3
-soil_moisture_anomaly
-ndvi_anomaly
-lst_anomaly
-surface_water_anomaly
-groundwater_anomaly
-WSI
-WSI_category
-```
-
-### Dataset Statistics
-
-* 2,112 district-month observations
-* 8 districts
-* 264 months
-* January 2003 – December 2024
-* 10 columns in the final model dataset
-
-A separate audit dataset contains the raw/source variables together with the final calculated features and WSI values for traceability.
-
----
-
-## 🔍 Model Dataset vs Audit Dataset
-
-The final model dataset is the clean modeling version containing only the final features and WSI outputs.
-
-The audit dataset contains:
-
-* Raw rainfall
-* Raw soil water storage
-* Raw NDVI
-* Raw LST
-* Groundwater observations
-* Groundwater observation dates
-* Months since last groundwater observation
-* Number of wells
-* Surface-water frequency
-* Valid pixels
-* Final calculated features
-* WSI
-* WSI category
-
-The calculated variables in both datasets were compared using district-date keys.
-
-The following variables were verified to match exactly:
-
-```text
-spi_3
-soil_moisture_anomaly
-ndvi_anomaly
-lst_anomaly
-surface_water_anomaly
-groundwater_anomaly
-WSI
-WSI_category
-```
-
-All 2,112 district-month observations passed the consistency check.
-
----
-
-## ✅ Final Dataset Validation
-
-The completed dataset passed the following validation checks:
-
-* 2,112 total rows
-* 8 unique districts
-* 264 months
-* 2,112 unique district-date keys
-* Complete monthly sequence for every district
-* No duplicate district-date keys
-* No missing final model features
-* No train/validation/test date overlap
-* Valid WSI categories
-* WSI reproducibility difference: 0.0
-* Model and audit calculated variables match exactly
-
----
-
-## 📁 Repository Structure
+## Repository Structure
 
 ```text
 marathwada-drought-wsi/
 │
-├── README.md
-├── requirements.txt
+├── README.md                                  # Documentation and reproduction guide
+├── requirements.txt                           # Python dependencies
+├── .gitignore                                 # Git exclusions (.venv, archive/, tests/, data/*.csv)
 │
-├── notebooks/
-│   └── Marathwada_Drought_WSI_Pipeline.ipynb
+├── config/
+│   └── pipeline.yaml                          # Model hyperparameters, thresholds, and paths
 │
-└── src/
-    └── full_pipeline.py
+├── data/
+│   ├── README.md                              # Data source specifications and retrieval instructions
+│   └── sample/
+│       └── sample_model_data.csv              # 24-row preview of the model feature matrix
+│
+├── EDA/
+│   ├── 01_data_quality.csv                    # Quality and completeness audit
+│   ├── 02_temporal_coverage.csv               # Temporal range and continuity metrics
+│   ├── 03_district_coverage.csv               # District-level observation counts
+│   ├── 04_missingness.csv                     # Missingness breakdown per stream
+│   ├── 05_summary_statistics.csv              # Feature distributional statistics
+│   ├── 06_monthly_climatology.csv             # 12-month seasonal climatologies
+│   ├── 07_outlier_report.csv                  # Anomaly and outlier audit
+│   ├── 08_correlation_matrix.csv              # Concurrent cross-feature correlation matrix
+│   ├── 09_lag_correlations.csv                # Multi-month lead/lag cross-correlations
+│   ├── 10_trend_statistics.csv                # Mann-Kendall and Sen's slope trend tests
+│   ├── figures/                               # 12 publication-quality diagnostic plots
+│   └── README.md                              # Detailed summary of exploratory findings
+│
+├── src/
+│   ├── __init__.py
+│   ├── ingestion.py                           # Raw data ingestion, bounds checking, calendar construction
+│   ├── qc.py                                  # Quality control, artifact masking, train-only imputation
+│   ├── groundwater.py                         # Well deduplication, sensitivity audit, causal propagation
+│   ├── spi.py                                 # CHIRPS rolling accumulation, Gamma fit, SPI-3 derivation
+│   ├── features.py                            # Soil moisture, NDVI, LST, and surface water anomalies
+│   ├── wsi.py                                 # Equal-weight WSI calculation and categorical labeling
+│   ├── validation.py                          # Automated 7-point data integrity and leakage audit
+│   └── pipeline.py                            # Master pipeline orchestrator (CLI entry point)
+│
+├── artifacts/
+│   ├── train_statistics.json                  # Parameters calibrated on training set (2003–2017)
+│   ├── preprocessing_metadata.json            # Tensor shapes, split definitions, and empirical stats
+│   └── validation_report.json                 # Audit report across all 7 verification checks
+│
+└── outputs/
+    ├── README.md                              # Output data dictionary and schemas
+    ├── Marathwada_MASTER_2003_2024.parquet    # Columnar binary archive with full multi-tier feature audit
+    ├── Marathwada_MASTER_AUDIT_DATASET_2003_2024.csv # 37-column complete audit trail (CSV)
+    └── Marathwada_MODEL_DATASET_2003_2024.csv # 17-column clean standardized model training matrix (CSV)
 ```
 
-### README.md
-
-Project documentation, methodology, dataset description, validation information, and future work.
-
-### requirements.txt
-
-Python packages required to run the pipeline.
-
-### notebooks/
-
-Contains the complete Google Colab/Jupyter workflow used for:
-
-* Data loading
-* Data preprocessing
-* Feature construction
-* Quality control
-* SPI calculation
-* Anomaly calculation
-* Groundwater processing
-* WSI construction
-* Dataset validation
-
-### src/
-
-Contains the Python code extracted from the notebook.
-
 ---
 
-## 🔬 Reproducibility
+## Reproduction
 
-The project follows a chronological data-processing strategy.
+### 1. Environment Setup
 
-The complete notebook preserves the data-processing workflow, while the Python source file contains the extracted pipeline code.
+```bash
+# Create virtual environment
+python -m venv .venv
 
-The final dataset construction uses:
+# Activate environment (Windows PowerShell)
+.\.venv\Scripts\Activate.ps1
 
-* Fixed study period
-* Standardized district names
-* District-month temporal alignment
-* Training-period-only transformation parameters
-* Chronological train/validation/test splitting
-* Groundwater as-of temporal alignment
-* Explicit quality-control procedures
-* Structural validation
-* Reproducibility checks
-* Model/audit consistency verification
+# Activate environment (Linux / macOS)
+source .venv/bin/activate
 
-The final model and corrected audit datasets were verified to contain identical calculated values for every district-month observation.
+# Install dependencies
+pip install --upgrade pip
+pip install -r requirements.txt
+```
 
----
+### 2. Execute Data Pipeline
 
-## 🛠️ Technologies Used
+To recompute all anomalies, calibrate distributions, and generate output datasets from raw data:
 
-* Python
-* Pandas
-* NumPy
-* SciPy
-* Matplotlib
-* Google Colab
-* Jupyter Notebook
-* Remote Sensing
-* Time-Series Analysis
-* Geospatial Data Processing
-* Statistical Anomaly Analysis
-* Drought Monitoring
-* Machine Learning Preparation
+```bash
+python src/pipeline.py --config config/pipeline.yaml
+```
 
----
-
-## 📚 Project Applications
-
-This project can support research and development in:
-
-* Drought monitoring
-* Water-resource management
-* Agricultural planning
-* Environmental monitoring
-* Climate-risk assessment
-* Hydrological analysis
-* Remote sensing
-* Drought early-warning systems
-* Time-series forecasting
-
----
-
-## 📌 Project Status
-
-**Dataset Construction: Complete**
-
-The 2003–2024 district-month Water Stress Index dataset has successfully passed:
-
-* Structural validation
-* Temporal validation
-* Missing-value validation
-* Duplicate-key validation
-* Train/validation/test split validation
-* WSI reproducibility validation
-* Model/audit consistency validation
-
-The dataset is ready for the next stage of drought early-warning and forecasting research.
-
----
-
-## 🚀 Future Work
-
-The completed WSI dataset provides a foundation for future drought early-warning and machine-learning applications.
-
-### Time-Series Forecasting
-
-* LSTM-based WSI forecasting
-* GRU-based forecasting
-* Transformer-based time-series forecasting
-* Multi-step WSI prediction
-* District-level temporal forecasting
-
-### Drought Early Warning
-
-* Forecasting future water-stress conditions
-* Early identification of severe stress events
-* District-level drought alerts
-* Lead-time based warning systems
-* Drought severity forecasting
-
-### Machine Learning
-
-Potential future models include:
-
-* Random Forest
-* XGBoost
-* LightGBM
-* Support Vector Machines
-* Neural Networks
-* Explainable AI approaches
-* Feature importance analysis
-* Model interpretability and attribution
-
-### Spatial Analysis
-
-Future extensions can include:
-
-* District-level drought-risk maps
-* Spatial drought propagation analysis
-* Spatial-temporal drought modelling
-* GIS-based visualization
-* Interactive drought-risk maps
-
-### Decision Support
-
-Future deployment possibilities include:
-
-* Real-time drought monitoring dashboards
-* Automated district-level alerts
-* Early-warning notification systems
-* Integration with weather forecasts
-* Integration with agricultural decision-support systems
-* Water-resource management support
-
----
-
-
-
+The pipeline automatically runs the validation suite before exporting artifacts:
+- Structural integrity (2,112 rows, 8 districts, 264 months)
+- Zero nulls across all six required model features
+- Exact mathematical parity between individual components and WSI
+- Temporal isolation across splits and forecast origins
 
