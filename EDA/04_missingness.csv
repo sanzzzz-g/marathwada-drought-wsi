@@ -1,0 +1,97 @@
+district,month,chirps_missing,era5_missing,ndvi_missing,lst_missing,gwp_missing,total_satellite_missing
+Beed,1,0,0,0,0,0,0
+Beed,2,0,0,0,0,0,0
+Beed,3,0,0,0,0,0,0
+Beed,4,0,0,0,0,0,0
+Beed,5,0,0,0,0,0,0
+Beed,6,0,0,0,0,0,0
+Beed,7,0,0,1,1,0,2
+Beed,8,0,0,0,0,0,0
+Beed,9,0,0,0,0,0,0
+Beed,10,0,0,0,0,0,0
+Beed,11,0,0,0,0,0,0
+Beed,12,0,0,0,0,0,0
+Chhatrapati Sambhajinagar,1,0,0,0,0,0,0
+Chhatrapati Sambhajinagar,2,0,0,0,0,0,0
+Chhatrapati Sambhajinagar,3,0,0,0,0,0,0
+Chhatrapati Sambhajinagar,4,0,0,0,0,0,0
+Chhatrapati Sambhajinagar,5,0,0,0,0,0,0
+Chhatrapati Sambhajinagar,6,0,0,0,0,0,0
+Chhatrapati Sambhajinagar,7,0,0,3,0,0,3
+Chhatrapati Sambhajinagar,8,0,0,0,0,0,0
+Chhatrapati Sambhajinagar,9,0,0,0,0,0,0
+Chhatrapati Sambhajinagar,10,0,0,0,0,0,0
+Chhatrapati Sambhajinagar,11,0,0,0,0,0,0
+Chhatrapati Sambhajinagar,12,0,0,0,0,0,0
+Dharashiv,1,0,0,0,0,0,0
+Dharashiv,2,0,0,0,0,0,0
+Dharashiv,3,0,0,0,0,0,0
+Dharashiv,4,0,0,0,0,0,0
+Dharashiv,5,0,0,0,0,0,0
+Dharashiv,6,0,0,0,0,0,0
+Dharashiv,7,0,0,2,1,0,3
+Dharashiv,8,0,0,0,0,0,0
+Dharashiv,9,0,0,0,0,0,0
+Dharashiv,10,0,0,0,0,0,0
+Dharashiv,11,0,0,0,0,0,0
+Dharashiv,12,0,0,0,0,0,0
+Hingoli,1,0,0,0,0,0,0
+Hingoli,2,0,0,0,0,0,0
+Hingoli,3,0,0,0,0,0,0
+Hingoli,4,0,0,0,0,0,0
+Hingoli,5,0,0,0,0,0,0
+Hingoli,6,0,0,1,0,0,1
+Hingoli,7,0,0,2,4,0,6
+Hingoli,8,0,0,0,0,0,0
+Hingoli,9,0,0,0,0,0,0
+Hingoli,10,0,0,0,0,0,0
+Hingoli,11,0,0,0,0,0,0
+Hingoli,12,0,0,0,0,0,0
+Jalna,1,0,0,0,0,0,0
+Jalna,2,0,0,0,0,0,0
+Jalna,3,0,0,0,0,0,0
+Jalna,4,0,0,0,0,0,0
+Jalna,5,0,0,0,0,0,0
+Jalna,6,0,0,0,0,0,0
+Jalna,7,0,0,3,5,0,8
+Jalna,8,0,0,0,0,0,0
+Jalna,9,0,0,0,0,0,0
+Jalna,10,0,0,0,0,0,0
+Jalna,11,0,0,0,0,0,0
+Jalna,12,0,0,0,0,0,0
+Latur,1,0,0,0,0,0,0
+Latur,2,0,0,0,0,0,0
+Latur,3,0,0,0,0,0,0
+Latur,4,0,0,0,0,0,0
+Latur,5,0,0,0,0,0,0
+Latur,6,0,0,1,0,0,1
+Latur,7,0,0,1,1,0,2
+Latur,8,0,0,0,0,0,0
+Latur,9,0,0,0,0,0,0
+Latur,10,0,0,0,0,0,0
+Latur,11,0,0,0,0,0,0
+Latur,12,0,0,0,0,0,0
+Nanded,1,0,0,0,0,0,0
+Nanded,2,0,0,0,0,0,0
+Nanded,3,0,0,0,0,0,0
+Nanded,4,0,0,0,0,0,0
+Nanded,5,0,0,0,0,0,0
+Nanded,6,0,0,0,0,0,0
+Nanded,7,0,0,1,1,0,2
+Nanded,8,0,0,0,0,0,0
+Nanded,9,0,0,0,0,0,0
+Nanded,10,0,0,0,0,0,0
+Nanded,11,0,0,0,0,0,0
+Nanded,12,0,0,0,0,0,0
+Parbhani,1,0,0,0,0,0,0
+Parbhani,2,0,0,0,0,0,0
+Parbhani,3,0,0,0,0,0,0
+Parbhani,4,0,0,0,0,0,0
+Parbhani,5,0,0,0,0,0,0
+Parbhani,6,0,0,1,0,0,1
+Parbhani,7,0,0,1,3,0,4
+Parbhani,8,0,0,0,0,0,0
+Parbhani,9,0,0,0,0,0,0
+Parbhani,10,0,0,0,0,0,0
+Parbhani,11,0,0,0,0,0,0
+Parbhani,12,0,0,0,0,0,0

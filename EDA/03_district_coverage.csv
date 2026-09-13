@@ -1,0 +1,9 @@
+district,chirps_total,era5_total,ndvi_total,lst_total,gwp_total,gw_total_records,gw_unique_wells,gw_blocks,gw_monitored_months,chirps_cp_2003_2024,era5_cp_2003_2024,ndvi_cp_2003_2024,lst_cp_2003_2024,gwp_cp_2003_2024,gw_cp_monitored_months,qc_status
+Beed,546,319,307,307,264,19836,126,11,260,264,264,264,264,264,113,PASS (All 8 canonical districts verified across 6 streams)
+Chhatrapati Sambhajinagar,546,319,307,307,264,39236,306,9,289,264,264,264,264,264,123,PASS (All 8 canonical districts verified across 6 streams)
+Dharashiv,546,319,307,307,264,17560,116,8,190,264,264,264,264,264,113,PASS (All 8 canonical districts verified across 6 streams)
+Hingoli,546,319,307,307,264,10480,64,5,239,264,264,264,264,264,108,PASS (All 8 canonical districts verified across 6 streams)
+Jalna,546,319,307,307,264,18494,146,8,267,264,264,264,264,264,110,PASS (All 8 canonical districts verified across 6 streams)
+Latur,546,319,307,307,264,17048,117,10,185,264,264,264,264,264,109,PASS (All 8 canonical districts verified across 6 streams)
+Nanded,546,319,307,307,264,18028,152,16,185,264,264,264,264,264,112,PASS (All 8 canonical districts verified across 6 streams)
+Parbhani,546,319,307,307,264,17329,98,9,325,264,264,264,264,264,113,PASS (All 8 canonical districts verified across 6 streams)

@@ -1,0 +1,30 @@
+{
+  "experiment": "A",
+  "input_features": [
+    "spi_stress_z",
+    "soil_stress_z",
+    "ndvi_stress_z",
+    "lst_stress_z",
+    "groundwater_stress_z",
+    "surface_water_stress_z"
+  ],
+  "input_shape": [
+    12,
+    6
+  ],
+  "target": "WSI",
+  "lookback_months": 12,
+  "forecast_horizon": 3,
+  "lstm_units": 32,
+  "dropout": 0.2,
+  "dense_units": 16,
+  "loss": "Huber(delta=1.0)",
+  "optimizer": "Adam",
+  "learning_rate": 0.001,
+  "batch_size": 32,
+  "shuffle": false,
+  "seed": 42,
+  "best_epoch": 6,
+  "test_mae": 0.5583,
+  "persistence_test_mae": 0.4188
+}

@@ -1,0 +1,46 @@
+# Python environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Byte-compiled and test caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# Operating system and temporary files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+*.tmp
+*.bak
+
+# IDE configurations
+.idea/
+.vscode/
+
+# Jupyter notebooks and checkpoints
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+notebooks/
+
+# Large data and model binary files
+data/*.csv
+!data/sample/
+!data/sample/*.csv
+data_model/*.npy
+data_model_residual/*.npy
+*.npy
+*.keras
+*.h5
+archive/

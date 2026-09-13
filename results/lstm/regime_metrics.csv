@@ -1,0 +1,6 @@
+model,regime,sample_count,mae,rmse
+LSTM,Very Wet,181,1.1139,1.2244
+LSTM,Wet,744,0.461,0.5995
+LSTM,Normal,155,0.3765,0.4435
+LSTM,Moderate Stress,0,0.0,0.0
+LSTM,Severe Stress,0,0.0,0.0

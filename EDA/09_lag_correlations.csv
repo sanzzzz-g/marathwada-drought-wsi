@@ -1,0 +1,451 @@
+district,response_variable,lag_k,correlation
+Marathwada_Pooled,Soil Water (ERA5),-3,-0.0026
+Marathwada_Pooled,Soil Water (ERA5),-2,0.0603
+Marathwada_Pooled,Soil Water (ERA5),-1,0.1519
+Marathwada_Pooled,Soil Water (ERA5),0,0.2157
+Marathwada_Pooled,Soil Water (ERA5),1,0.2143
+Marathwada_Pooled,Soil Water (ERA5),2,0.1621
+Marathwada_Pooled,Soil Water (ERA5),3,0.1635
+Marathwada_Pooled,Soil Water (ERA5),4,0.1799
+Marathwada_Pooled,Soil Water (ERA5),5,0.1872
+Marathwada_Pooled,Soil Water (ERA5),6,0.1508
+Beed,Soil Water (ERA5),-3,0.0239
+Beed,Soil Water (ERA5),-2,0.1047
+Beed,Soil Water (ERA5),-1,0.2198
+Beed,Soil Water (ERA5),0,0.2906
+Beed,Soil Water (ERA5),1,0.2846
+Beed,Soil Water (ERA5),2,0.2097
+Beed,Soil Water (ERA5),3,0.1962
+Beed,Soil Water (ERA5),4,0.1913
+Beed,Soil Water (ERA5),5,0.1818
+Beed,Soil Water (ERA5),6,0.1504
+Chhatrapati Sambhajinagar,Soil Water (ERA5),-3,0.0604
+Chhatrapati Sambhajinagar,Soil Water (ERA5),-2,0.1472
+Chhatrapati Sambhajinagar,Soil Water (ERA5),-1,0.2621
+Chhatrapati Sambhajinagar,Soil Water (ERA5),0,0.3336
+Chhatrapati Sambhajinagar,Soil Water (ERA5),1,0.3137
+Chhatrapati Sambhajinagar,Soil Water (ERA5),2,0.2184
+Chhatrapati Sambhajinagar,Soil Water (ERA5),3,0.157
+Chhatrapati Sambhajinagar,Soil Water (ERA5),4,0.1112
+Chhatrapati Sambhajinagar,Soil Water (ERA5),5,0.0903
+Chhatrapati Sambhajinagar,Soil Water (ERA5),6,0.0621
+Dharashiv,Soil Water (ERA5),-3,0.0694
+Dharashiv,Soil Water (ERA5),-2,0.1364
+Dharashiv,Soil Water (ERA5),-1,0.225
+Dharashiv,Soil Water (ERA5),0,0.2748
+Dharashiv,Soil Water (ERA5),1,0.2567
+Dharashiv,Soil Water (ERA5),2,0.1859
+Dharashiv,Soil Water (ERA5),3,0.1816
+Dharashiv,Soil Water (ERA5),4,0.1956
+Dharashiv,Soil Water (ERA5),5,0.2073
+Dharashiv,Soil Water (ERA5),6,0.1779
+Hingoli,Soil Water (ERA5),-3,-0.0658
+Hingoli,Soil Water (ERA5),-2,0.0138
+Hingoli,Soil Water (ERA5),-1,0.1217
+Hingoli,Soil Water (ERA5),0,0.2009
+Hingoli,Soil Water (ERA5),1,0.2038
+Hingoli,Soil Water (ERA5),2,0.1537
+Hingoli,Soil Water (ERA5),3,0.1652
+Hingoli,Soil Water (ERA5),4,0.1901
+Hingoli,Soil Water (ERA5),5,0.2009
+Hingoli,Soil Water (ERA5),6,0.1499
+Jalna,Soil Water (ERA5),-3,0.0279
+Jalna,Soil Water (ERA5),-2,0.1014
+Jalna,Soil Water (ERA5),-1,0.2097
+Jalna,Soil Water (ERA5),0,0.2867
+Jalna,Soil Water (ERA5),1,0.2734
+Jalna,Soil Water (ERA5),2,0.1964
+Jalna,Soil Water (ERA5),3,0.1595
+Jalna,Soil Water (ERA5),4,0.149
+Jalna,Soil Water (ERA5),5,0.1451
+Jalna,Soil Water (ERA5),6,0.1132
+Latur,Soil Water (ERA5),-3,0.009
+Latur,Soil Water (ERA5),-2,0.0498
+Latur,Soil Water (ERA5),-1,0.1251
+Latur,Soil Water (ERA5),0,0.1837
+Latur,Soil Water (ERA5),1,0.2079
+Latur,Soil Water (ERA5),2,0.1934
+Latur,Soil Water (ERA5),3,0.2366
+Latur,Soil Water (ERA5),4,0.286
+Latur,Soil Water (ERA5),5,0.302
+Latur,Soil Water (ERA5),6,0.255
+Nanded,Soil Water (ERA5),-3,-0.0687
+Nanded,Soil Water (ERA5),-2,-0.0252
+Nanded,Soil Water (ERA5),-1,0.0482
+Nanded,Soil Water (ERA5),0,0.1086
+Nanded,Soil Water (ERA5),1,0.1158
+Nanded,Soil Water (ERA5),2,0.0976
+Nanded,Soil Water (ERA5),3,0.1518
+Nanded,Soil Water (ERA5),4,0.2233
+Nanded,Soil Water (ERA5),5,0.2622
+Nanded,Soil Water (ERA5),6,0.2174
+Parbhani,Soil Water (ERA5),-3,-0.0289
+Parbhani,Soil Water (ERA5),-2,0.0395
+Parbhani,Soil Water (ERA5),-1,0.1412
+Parbhani,Soil Water (ERA5),0,0.2171
+Parbhani,Soil Water (ERA5),1,0.2225
+Parbhani,Soil Water (ERA5),2,0.1677
+Parbhani,Soil Water (ERA5),3,0.1733
+Parbhani,Soil Water (ERA5),4,0.2008
+Parbhani,Soil Water (ERA5),5,0.2135
+Parbhani,Soil Water (ERA5),6,0.1735
+Marathwada_Pooled,Vegetation (NDVI),-3,0.0063
+Marathwada_Pooled,Vegetation (NDVI),-2,0.0326
+Marathwada_Pooled,Vegetation (NDVI),-1,0.0755
+Marathwada_Pooled,Vegetation (NDVI),0,0.1127
+Marathwada_Pooled,Vegetation (NDVI),1,0.0871
+Marathwada_Pooled,Vegetation (NDVI),2,0.0358
+Marathwada_Pooled,Vegetation (NDVI),3,0.0609
+Marathwada_Pooled,Vegetation (NDVI),4,0.1232
+Marathwada_Pooled,Vegetation (NDVI),5,0.1115
+Marathwada_Pooled,Vegetation (NDVI),6,0.0778
+Beed,Vegetation (NDVI),-3,0.0127
+Beed,Vegetation (NDVI),-2,0.0632
+Beed,Vegetation (NDVI),-1,0.1323
+Beed,Vegetation (NDVI),0,0.1759
+Beed,Vegetation (NDVI),1,0.1415
+Beed,Vegetation (NDVI),2,0.0607
+Beed,Vegetation (NDVI),3,0.0807
+Beed,Vegetation (NDVI),4,0.1014
+Beed,Vegetation (NDVI),5,0.0741
+Beed,Vegetation (NDVI),6,0.0378
+Chhatrapati Sambhajinagar,Vegetation (NDVI),-3,0.0653
+Chhatrapati Sambhajinagar,Vegetation (NDVI),-2,0.1362
+Chhatrapati Sambhajinagar,Vegetation (NDVI),-1,0.2003
+Chhatrapati Sambhajinagar,Vegetation (NDVI),0,0.2648
+Chhatrapati Sambhajinagar,Vegetation (NDVI),1,0.198
+Chhatrapati Sambhajinagar,Vegetation (NDVI),2,0.1185
+Chhatrapati Sambhajinagar,Vegetation (NDVI),3,0.0747
+Chhatrapati Sambhajinagar,Vegetation (NDVI),4,0.0703
+Chhatrapati Sambhajinagar,Vegetation (NDVI),5,0.0582
+Chhatrapati Sambhajinagar,Vegetation (NDVI),6,0.0134
+Dharashiv,Vegetation (NDVI),-3,0.0672
+Dharashiv,Vegetation (NDVI),-2,0.0846
+Dharashiv,Vegetation (NDVI),-1,0.1049
+Dharashiv,Vegetation (NDVI),0,0.1214
+Dharashiv,Vegetation (NDVI),1,0.0899
+Dharashiv,Vegetation (NDVI),2,0.0427
+Dharashiv,Vegetation (NDVI),3,0.0763
+Dharashiv,Vegetation (NDVI),4,0.1394
+Dharashiv,Vegetation (NDVI),5,0.127
+Dharashiv,Vegetation (NDVI),6,0.1271
+Hingoli,Vegetation (NDVI),-3,-0.0362
+Hingoli,Vegetation (NDVI),-2,0.0054
+Hingoli,Vegetation (NDVI),-1,0.0424
+Hingoli,Vegetation (NDVI),0,0.0855
+Hingoli,Vegetation (NDVI),1,0.0525
+Hingoli,Vegetation (NDVI),2,0.0198
+Hingoli,Vegetation (NDVI),3,0.0526
+Hingoli,Vegetation (NDVI),4,0.1162
+Hingoli,Vegetation (NDVI),5,0.0742
+Hingoli,Vegetation (NDVI),6,0.0434
+Jalna,Vegetation (NDVI),-3,0.0417
+Jalna,Vegetation (NDVI),-2,0.0787
+Jalna,Vegetation (NDVI),-1,0.1558
+Jalna,Vegetation (NDVI),0,0.1974
+Jalna,Vegetation (NDVI),1,0.1613
+Jalna,Vegetation (NDVI),2,0.0782
+Jalna,Vegetation (NDVI),3,0.0552
+Jalna,Vegetation (NDVI),4,0.1045
+Jalna,Vegetation (NDVI),5,0.0884
+Jalna,Vegetation (NDVI),6,0.0139
+Latur,Vegetation (NDVI),-3,0.0037
+Latur,Vegetation (NDVI),-2,-0.0056
+Latur,Vegetation (NDVI),-1,0.0204
+Latur,Vegetation (NDVI),0,0.0455
+Latur,Vegetation (NDVI),1,0.0463
+Latur,Vegetation (NDVI),2,0.0073
+Latur,Vegetation (NDVI),3,0.0729
+Latur,Vegetation (NDVI),4,0.1729
+Latur,Vegetation (NDVI),5,0.1721
+Latur,Vegetation (NDVI),6,0.1537
+Nanded,Vegetation (NDVI),-3,-0.049
+Nanded,Vegetation (NDVI),-2,-0.0443
+Nanded,Vegetation (NDVI),-1,-0.0312
+Nanded,Vegetation (NDVI),0,-0.0002
+Nanded,Vegetation (NDVI),1,-0.0127
+Nanded,Vegetation (NDVI),2,-0.0249
+Nanded,Vegetation (NDVI),3,0.0518
+Nanded,Vegetation (NDVI),4,0.16
+Nanded,Vegetation (NDVI),5,0.1796
+Nanded,Vegetation (NDVI),6,0.1424
+Parbhani,Vegetation (NDVI),-3,-0.0358
+Parbhani,Vegetation (NDVI),-2,-0.0247
+Parbhani,Vegetation (NDVI),-1,0.0232
+Parbhani,Vegetation (NDVI),0,0.06
+Parbhani,Vegetation (NDVI),1,0.056
+Parbhani,Vegetation (NDVI),2,0.0036
+Parbhani,Vegetation (NDVI),3,0.0261
+Parbhani,Vegetation (NDVI),4,0.1078
+Parbhani,Vegetation (NDVI),5,0.0979
+Parbhani,Vegetation (NDVI),6,0.066
+Marathwada_Pooled,Groundwater Depth (m bgl),-3,0.0216
+Marathwada_Pooled,Groundwater Depth (m bgl),-2,-0.0341
+Marathwada_Pooled,Groundwater Depth (m bgl),-1,-0.0249
+Marathwada_Pooled,Groundwater Depth (m bgl),0,-0.1576
+Marathwada_Pooled,Groundwater Depth (m bgl),1,-0.1258
+Marathwada_Pooled,Groundwater Depth (m bgl),2,-0.1639
+Marathwada_Pooled,Groundwater Depth (m bgl),3,-0.1997
+Marathwada_Pooled,Groundwater Depth (m bgl),4,-0.1391
+Marathwada_Pooled,Groundwater Depth (m bgl),5,-0.2509
+Marathwada_Pooled,Groundwater Depth (m bgl),6,-0.176
+Beed,Groundwater Depth (m bgl),-3,0.0284
+Beed,Groundwater Depth (m bgl),-2,-0.0378
+Beed,Groundwater Depth (m bgl),-1,-0.0703
+Beed,Groundwater Depth (m bgl),0,-0.1525
+Beed,Groundwater Depth (m bgl),1,-0.1523
+Beed,Groundwater Depth (m bgl),2,-0.1519
+Beed,Groundwater Depth (m bgl),3,-0.2195
+Beed,Groundwater Depth (m bgl),4,-0.1368
+Beed,Groundwater Depth (m bgl),5,-0.2198
+Beed,Groundwater Depth (m bgl),6,-0.1846
+Chhatrapati Sambhajinagar,Groundwater Depth (m bgl),-3,0.0127
+Chhatrapati Sambhajinagar,Groundwater Depth (m bgl),-2,-0.0706
+Chhatrapati Sambhajinagar,Groundwater Depth (m bgl),-1,-0.0422
+Chhatrapati Sambhajinagar,Groundwater Depth (m bgl),0,-0.2989
+Chhatrapati Sambhajinagar,Groundwater Depth (m bgl),1,-0.196
+Chhatrapati Sambhajinagar,Groundwater Depth (m bgl),2,-0.2552
+Chhatrapati Sambhajinagar,Groundwater Depth (m bgl),3,-0.1974
+Chhatrapati Sambhajinagar,Groundwater Depth (m bgl),4,-0.0794
+Chhatrapati Sambhajinagar,Groundwater Depth (m bgl),5,-0.1494
+Chhatrapati Sambhajinagar,Groundwater Depth (m bgl),6,-0.0713
+Dharashiv,Groundwater Depth (m bgl),-3,-0.0559
+Dharashiv,Groundwater Depth (m bgl),-2,-0.0757
+Dharashiv,Groundwater Depth (m bgl),-1,-0.0832
+Dharashiv,Groundwater Depth (m bgl),0,-0.2162
+Dharashiv,Groundwater Depth (m bgl),1,-0.1245
+Dharashiv,Groundwater Depth (m bgl),2,-0.1595
+Dharashiv,Groundwater Depth (m bgl),3,-0.2345
+Dharashiv,Groundwater Depth (m bgl),4,-0.244
+Dharashiv,Groundwater Depth (m bgl),5,-0.3491
+Dharashiv,Groundwater Depth (m bgl),6,-0.2355
+Hingoli,Groundwater Depth (m bgl),-3,0.0568
+Hingoli,Groundwater Depth (m bgl),-2,-0.044
+Hingoli,Groundwater Depth (m bgl),-1,-0.0119
+Hingoli,Groundwater Depth (m bgl),0,-0.1244
+Hingoli,Groundwater Depth (m bgl),1,-0.1338
+Hingoli,Groundwater Depth (m bgl),2,-0.192
+Hingoli,Groundwater Depth (m bgl),3,-0.2108
+Hingoli,Groundwater Depth (m bgl),4,-0.1288
+Hingoli,Groundwater Depth (m bgl),5,-0.274
+Hingoli,Groundwater Depth (m bgl),6,-0.1455
+Jalna,Groundwater Depth (m bgl),-3,0.004
+Jalna,Groundwater Depth (m bgl),-2,-0.061
+Jalna,Groundwater Depth (m bgl),-1,-0.1002
+Jalna,Groundwater Depth (m bgl),0,-0.2021
+Jalna,Groundwater Depth (m bgl),1,-0.1955
+Jalna,Groundwater Depth (m bgl),2,-0.175
+Jalna,Groundwater Depth (m bgl),3,-0.2393
+Jalna,Groundwater Depth (m bgl),4,-0.0546
+Jalna,Groundwater Depth (m bgl),5,-0.2115
+Jalna,Groundwater Depth (m bgl),6,-0.1521
+Latur,Groundwater Depth (m bgl),-3,-0.0103
+Latur,Groundwater Depth (m bgl),-2,0.0117
+Latur,Groundwater Depth (m bgl),-1,-0.0065
+Latur,Groundwater Depth (m bgl),0,-0.1577
+Latur,Groundwater Depth (m bgl),1,-0.0359
+Latur,Groundwater Depth (m bgl),2,-0.105
+Latur,Groundwater Depth (m bgl),3,-0.1828
+Latur,Groundwater Depth (m bgl),4,-0.2663
+Latur,Groundwater Depth (m bgl),5,-0.3563
+Latur,Groundwater Depth (m bgl),6,-0.2886
+Nanded,Groundwater Depth (m bgl),-3,0.0983
+Nanded,Groundwater Depth (m bgl),-2,0.0154
+Nanded,Groundwater Depth (m bgl),-1,0.1234
+Nanded,Groundwater Depth (m bgl),0,-0.0249
+Nanded,Groundwater Depth (m bgl),1,-0.0167
+Nanded,Groundwater Depth (m bgl),2,-0.1524
+Nanded,Groundwater Depth (m bgl),3,-0.149
+Nanded,Groundwater Depth (m bgl),4,-0.1323
+Nanded,Groundwater Depth (m bgl),5,-0.2824
+Nanded,Groundwater Depth (m bgl),6,-0.1918
+Parbhani,Groundwater Depth (m bgl),-3,0.0506
+Parbhani,Groundwater Depth (m bgl),-2,-0.0591
+Parbhani,Groundwater Depth (m bgl),-1,-0.0389
+Parbhani,Groundwater Depth (m bgl),0,-0.121
+Parbhani,Groundwater Depth (m bgl),1,-0.2308
+Parbhani,Groundwater Depth (m bgl),2,-0.2484
+Parbhani,Groundwater Depth (m bgl),3,-0.3414
+Parbhani,Groundwater Depth (m bgl),4,-0.1743
+Parbhani,Groundwater Depth (m bgl),5,-0.3255
+Parbhani,Groundwater Depth (m bgl),6,-0.2162
+Marathwada_Pooled,Surface Water (GWP),-3,0.0362
+Marathwada_Pooled,Surface Water (GWP),-2,0.0488
+Marathwada_Pooled,Surface Water (GWP),-1,0.0915
+Marathwada_Pooled,Surface Water (GWP),0,0.1213
+Marathwada_Pooled,Surface Water (GWP),1,0.1602
+Marathwada_Pooled,Surface Water (GWP),2,0.1915
+Marathwada_Pooled,Surface Water (GWP),3,0.1516
+Marathwada_Pooled,Surface Water (GWP),4,0.1025
+Marathwada_Pooled,Surface Water (GWP),5,0.0618
+Marathwada_Pooled,Surface Water (GWP),6,0.0357
+Beed,Surface Water (GWP),-3,0.1157
+Beed,Surface Water (GWP),-2,0.1299
+Beed,Surface Water (GWP),-1,0.2007
+Beed,Surface Water (GWP),0,0.2383
+Beed,Surface Water (GWP),1,0.2915
+Beed,Surface Water (GWP),2,0.3409
+Beed,Surface Water (GWP),3,0.2617
+Beed,Surface Water (GWP),4,0.1668
+Beed,Surface Water (GWP),5,0.0978
+Beed,Surface Water (GWP),6,0.0455
+Chhatrapati Sambhajinagar,Surface Water (GWP),-3,0.061
+Chhatrapati Sambhajinagar,Surface Water (GWP),-2,0.083
+Chhatrapati Sambhajinagar,Surface Water (GWP),-1,0.1483
+Chhatrapati Sambhajinagar,Surface Water (GWP),0,0.175
+Chhatrapati Sambhajinagar,Surface Water (GWP),1,0.2348
+Chhatrapati Sambhajinagar,Surface Water (GWP),2,0.3016
+Chhatrapati Sambhajinagar,Surface Water (GWP),3,0.2608
+Chhatrapati Sambhajinagar,Surface Water (GWP),4,0.2141
+Chhatrapati Sambhajinagar,Surface Water (GWP),5,0.1554
+Chhatrapati Sambhajinagar,Surface Water (GWP),6,0.0964
+Dharashiv,Surface Water (GWP),-3,0.0687
+Dharashiv,Surface Water (GWP),-2,0.0948
+Dharashiv,Surface Water (GWP),-1,0.183
+Dharashiv,Surface Water (GWP),0,0.2499
+Dharashiv,Surface Water (GWP),1,0.3029
+Dharashiv,Surface Water (GWP),2,0.3238
+Dharashiv,Surface Water (GWP),3,0.2574
+Dharashiv,Surface Water (GWP),4,0.1896
+Dharashiv,Surface Water (GWP),5,0.1238
+Dharashiv,Surface Water (GWP),6,0.0546
+Hingoli,Surface Water (GWP),-3,0.0753
+Hingoli,Surface Water (GWP),-2,0.1025
+Hingoli,Surface Water (GWP),-1,0.1881
+Hingoli,Surface Water (GWP),0,0.2561
+Hingoli,Surface Water (GWP),1,0.3277
+Hingoli,Surface Water (GWP),2,0.3824
+Hingoli,Surface Water (GWP),3,0.343
+Hingoli,Surface Water (GWP),4,0.291
+Hingoli,Surface Water (GWP),5,0.239
+Hingoli,Surface Water (GWP),6,0.2391
+Jalna,Surface Water (GWP),-3,0.0811
+Jalna,Surface Water (GWP),-2,0.0729
+Jalna,Surface Water (GWP),-1,0.0934
+Jalna,Surface Water (GWP),0,0.1149
+Jalna,Surface Water (GWP),1,0.1932
+Jalna,Surface Water (GWP),2,0.3033
+Jalna,Surface Water (GWP),3,0.246
+Jalna,Surface Water (GWP),4,0.1548
+Jalna,Surface Water (GWP),5,0.1041
+Jalna,Surface Water (GWP),6,0.0677
+Latur,Surface Water (GWP),-3,0.0137
+Latur,Surface Water (GWP),-2,0.0422
+Latur,Surface Water (GWP),-1,0.14
+Latur,Surface Water (GWP),0,0.2185
+Latur,Surface Water (GWP),1,0.2933
+Latur,Surface Water (GWP),2,0.3076
+Latur,Surface Water (GWP),3,0.1988
+Latur,Surface Water (GWP),4,0.0778
+Latur,Surface Water (GWP),5,-0.0152
+Latur,Surface Water (GWP),6,-0.0694
+Nanded,Surface Water (GWP),-3,0.0611
+Nanded,Surface Water (GWP),-2,0.1061
+Nanded,Surface Water (GWP),-1,0.1701
+Nanded,Surface Water (GWP),0,0.2089
+Nanded,Surface Water (GWP),1,0.2888
+Nanded,Surface Water (GWP),2,0.3411
+Nanded,Surface Water (GWP),3,0.2476
+Nanded,Surface Water (GWP),4,0.1088
+Nanded,Surface Water (GWP),5,-0.0192
+Nanded,Surface Water (GWP),6,-0.0763
+Parbhani,Surface Water (GWP),-3,0.0982
+Parbhani,Surface Water (GWP),-2,0.1173
+Parbhani,Surface Water (GWP),-1,0.1851
+Parbhani,Surface Water (GWP),0,0.2268
+Parbhani,Surface Water (GWP),1,0.295
+Parbhani,Surface Water (GWP),2,0.3742
+Parbhani,Surface Water (GWP),3,0.3019
+Parbhani,Surface Water (GWP),4,0.2105
+Parbhani,Surface Water (GWP),5,0.1546
+Parbhani,Surface Water (GWP),6,0.1234
+Marathwada_Pooled,Temperature (LST),-3,-0.0289
+Marathwada_Pooled,Temperature (LST),-2,-0.0674
+Marathwada_Pooled,Temperature (LST),-1,-0.0655
+Marathwada_Pooled,Temperature (LST),0,-0.0655
+Marathwada_Pooled,Temperature (LST),1,-0.0341
+Marathwada_Pooled,Temperature (LST),2,-0.0565
+Marathwada_Pooled,Temperature (LST),3,-0.1054
+Marathwada_Pooled,Temperature (LST),4,-0.145
+Marathwada_Pooled,Temperature (LST),5,-0.1276
+Marathwada_Pooled,Temperature (LST),6,-0.0882
+Beed,Temperature (LST),-3,-0.0446
+Beed,Temperature (LST),-2,-0.0883
+Beed,Temperature (LST),-1,-0.1013
+Beed,Temperature (LST),0,-0.1053
+Beed,Temperature (LST),1,-0.0822
+Beed,Temperature (LST),2,-0.092
+Beed,Temperature (LST),3,-0.1238
+Beed,Temperature (LST),4,-0.1245
+Beed,Temperature (LST),5,-0.0873
+Beed,Temperature (LST),6,-0.0542
+Chhatrapati Sambhajinagar,Temperature (LST),-3,-0.0323
+Chhatrapati Sambhajinagar,Temperature (LST),-2,-0.1173
+Chhatrapati Sambhajinagar,Temperature (LST),-1,-0.1726
+Chhatrapati Sambhajinagar,Temperature (LST),0,-0.1844
+Chhatrapati Sambhajinagar,Temperature (LST),1,-0.1305
+Chhatrapati Sambhajinagar,Temperature (LST),2,-0.093
+Chhatrapati Sambhajinagar,Temperature (LST),3,-0.0949
+Chhatrapati Sambhajinagar,Temperature (LST),4,-0.1041
+Chhatrapati Sambhajinagar,Temperature (LST),5,-0.0799
+Chhatrapati Sambhajinagar,Temperature (LST),6,-0.0162
+Dharashiv,Temperature (LST),-3,-0.0877
+Dharashiv,Temperature (LST),-2,-0.1167
+Dharashiv,Temperature (LST),-1,-0.1019
+Dharashiv,Temperature (LST),0,-0.0904
+Dharashiv,Temperature (LST),1,-0.0645
+Dharashiv,Temperature (LST),2,-0.0887
+Dharashiv,Temperature (LST),3,-0.1318
+Dharashiv,Temperature (LST),4,-0.1489
+Dharashiv,Temperature (LST),5,-0.132
+Dharashiv,Temperature (LST),6,-0.1074
+Hingoli,Temperature (LST),-3,0.0354
+Hingoli,Temperature (LST),-2,-0.0217
+Hingoli,Temperature (LST),-1,-0.0197
+Hingoli,Temperature (LST),0,-0.0442
+Hingoli,Temperature (LST),1,-0.0169
+Hingoli,Temperature (LST),2,-0.0623
+Hingoli,Temperature (LST),3,-0.129
+Hingoli,Temperature (LST),4,-0.1747
+Hingoli,Temperature (LST),5,-0.1419
+Hingoli,Temperature (LST),6,-0.0733
+Jalna,Temperature (LST),-3,-0.0122
+Jalna,Temperature (LST),-2,-0.0683
+Jalna,Temperature (LST),-1,-0.0904
+Jalna,Temperature (LST),0,-0.1027
+Jalna,Temperature (LST),1,-0.0759
+Jalna,Temperature (LST),2,-0.0957
+Jalna,Temperature (LST),3,-0.1319
+Jalna,Temperature (LST),4,-0.1571
+Jalna,Temperature (LST),5,-0.1097
+Jalna,Temperature (LST),6,-0.0364
+Latur,Temperature (LST),-3,-0.0673
+Latur,Temperature (LST),-2,-0.0622
+Latur,Temperature (LST),-1,-0.0257
+Latur,Temperature (LST),0,-0.0038
+Latur,Temperature (LST),1,0.0141
+Latur,Temperature (LST),2,-0.0241
+Latur,Temperature (LST),3,-0.0875
+Latur,Temperature (LST),4,-0.1638
+Latur,Temperature (LST),5,-0.1804
+Latur,Temperature (LST),6,-0.1575
+Nanded,Temperature (LST),-3,-0.0437
+Nanded,Temperature (LST),-2,-0.0437
+Nanded,Temperature (LST),-1,-0.0072
+Nanded,Temperature (LST),0,0.0259
+Nanded,Temperature (LST),1,0.0647
+Nanded,Temperature (LST),2,0.0317
+Nanded,Temperature (LST),3,-0.0432
+Nanded,Temperature (LST),4,-0.1435
+Nanded,Temperature (LST),5,-0.1631
+Nanded,Temperature (LST),6,-0.1701
+Parbhani,Temperature (LST),-3,0.0135
+Parbhani,Temperature (LST),-2,-0.0326
+Parbhani,Temperature (LST),-1,-0.0224
+Parbhani,Temperature (LST),0,-0.0361
+Parbhani,Temperature (LST),1,0.0003
+Parbhani,Temperature (LST),2,-0.0418
+Parbhani,Temperature (LST),3,-0.1082
+Parbhani,Temperature (LST),4,-0.1384
+Parbhani,Temperature (LST),5,-0.1168
+Parbhani,Temperature (LST),6,-0.0766

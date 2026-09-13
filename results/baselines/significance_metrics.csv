@@ -1,0 +1,5 @@
+candidate_model,champion_model,observed_mae_diff,ci_95_lower,ci_95_upper,bootstrap_p_value,significantly_different,candidate_is_better
+Ridge_Regression,Persistence,0.14395,0.03522,0.26418,0.01,True,False
+Seasonal_Persistence,Persistence,0.1601,0.04613,0.25996,0.002,True,False
+WSI_Autoregression,Persistence,0.08791,0.02059,0.14959,0.01,True,False
+XGBoost,Persistence,0.1515,0.0474,0.25566,0.002,True,False

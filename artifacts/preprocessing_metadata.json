@@ -1,0 +1,138 @@
+{
+  "pipeline_version": "2.0.0",
+  "districts_count": 8,
+  "total_canonical_months": 264,
+  "total_rows": 2112,
+  "splits": {
+    "row_level": {
+      "train": {
+        "start": "2003-01-01",
+        "end": "2017-12-01",
+        "months": 180,
+        "rows": 1440
+      },
+      "validation": {
+        "start": "2018-01-01",
+        "end": "2020-12-01",
+        "months": 36,
+        "rows": 288
+      },
+      "test": {
+        "start": "2021-01-01",
+        "end": "2024-12-01",
+        "months": 48,
+        "rows": 384
+      }
+    },
+    "forecast_origin": {
+      "lookback_window_months": 12,
+      "forecast_horizon_months": 3,
+      "last_train_origin": "2017-09-01",
+      "first_val_origin": "2018-01-01",
+      "first_test_origin": "2021-01-01"
+    }
+  },
+  "wsi_formula": "WSI = (spi_stress_z + soil_stress_z + ndvi_stress_z + lst_stress_z + groundwater_stress_z + surface_water_stress_z) / 6.0",
+  "component_weights": {
+    "spi_stress_z": 0.16666666666666666,
+    "soil_stress_z": 0.16666666666666666,
+    "ndvi_stress_z": 0.16666666666666666,
+    "lst_stress_z": 0.16666666666666666,
+    "groundwater_stress_z": 0.16666666666666666,
+    "surface_water_stress_z": 0.16666666666666666
+  },
+  "wsi_category_thresholds": {
+    "very_wet": {
+      "max": -1.5,
+      "label": "Very Wet"
+    },
+    "wet": {
+      "min": -1.5,
+      "max": -0.5,
+      "label": "Wet"
+    },
+    "normal": {
+      "min": -0.5,
+      "max": 0.5,
+      "label": "Normal"
+    },
+    "moderate_stress": {
+      "min": 0.5,
+      "max": 1.5,
+      "label": "Moderate Stress"
+    },
+    "severe_stress": {
+      "min": 1.5,
+      "label": "Severe Stress"
+    }
+  },
+  "imputation_counts": {
+    "ndvi_imputed_cells": 18,
+    "lst_imputed_cells": 16
+  },
+  "groundwater_empirical_coverage": {
+    "min_wells_threshold": 10,
+    "total_canonical_district_months": 2112,
+    "qualifying_observations_count": 832,
+    "low_sample_or_missing_count": 1280,
+    "pct_months_with_n_lt_10": 60.60606060606061,
+    "overall_max_gap_months": 4,
+    "overall_mean_groundwater_age_months": 0.993844696969697,
+    "district_max_gaps": {
+      "Beed": 4,
+      "Chhatrapati Sambhajinagar": 4,
+      "Dharashiv": 4,
+      "Hingoli": 4,
+      "Jalna": 3,
+      "Latur": 4,
+      "Nanded": 4,
+      "Parbhani": 4
+    },
+    "district_mean_ages": {
+      "Beed": 0.9886363636363636,
+      "Chhatrapati Sambhajinagar": 0.9848484848484849,
+      "Dharashiv": 0.9886363636363636,
+      "Hingoli": 0.9886363636363636,
+      "Jalna": 0.9848484848484849,
+      "Latur": 0.9848484848484849,
+      "Nanded": 1.0454545454545454,
+      "Parbhani": 0.9848484848484849
+    }
+  },
+  "groundwater_threshold_sensitivity": {
+    "N_5": {
+      "min_wells_threshold": 5,
+      "qualifying_observations_count": 834,
+      "low_sample_or_missing_count": 1278,
+      "pct_months_non_qualifying": 60.51136363636363,
+      "overall_max_gap_months": 4,
+      "overall_mean_age_months": 0.9928977272727273
+    },
+    "N_10": {
+      "min_wells_threshold": 10,
+      "qualifying_observations_count": 832,
+      "low_sample_or_missing_count": 1280,
+      "pct_months_non_qualifying": 60.60606060606061,
+      "overall_max_gap_months": 4,
+      "overall_mean_age_months": 0.993844696969697
+    },
+    "N_15": {
+      "min_wells_threshold": 15,
+      "qualifying_observations_count": 831,
+      "low_sample_or_missing_count": 1281,
+      "pct_months_non_qualifying": 60.65340909090909,
+      "overall_max_gap_months": 4,
+      "overall_mean_age_months": 0.9943181818181818
+    }
+  },
+  "forecast_origin_semantics": "Forecast issued after month t is complete, using data available through end of month t (X_t -> WSI_{t+1:t+3}).",
+  "model_input_tensor_shape": "Lookback 12 months, 6 continuous stress features: (12, 6). Targets: WSI for horizons t+1, t+2, t+3: (3,).",
+  "test_period_evaluation_note": "Test period (2021-2024) contains predominantly wet/normal conditions; continuous forecasting metrics (R^2, RMSE, MAE) are valid, but categorical drought event detection should use rolling-origin backtesting across historical droughts (e.g. 2015).",
+  "artifacts_generated": {
+    "master_parquet": ".\\Marathwada_MASTER_2003_2024.parquet",
+    "master_audit_csv": ".\\Marathwada_MASTER_AUDIT_DATASET_2003_2024.csv",
+    "model_csv": ".\\Marathwada_MODEL_DATASET_2003_2024.csv",
+    "train_statistics": ".\\train_statistics.json",
+    "validation_report": ".\\validation_report.json"
+  }
+}

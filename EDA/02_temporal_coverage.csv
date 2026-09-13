@@ -1,0 +1,7 @@
+dataset,earliest,latest,span_months,missing_district_months,notes
+CHIRPS,1981-01,2026-06,546,0,Complete grid
+ERA5,2000-01,2026-07,319,0,Complete grid
+NDVI,2000-02,2025-08,307,0,17 NaN values in column
+LST,2000-02,2025-08,307,0,16 NaN values in column
+GWP,2003-01,2024-12,264,0,Complete grid
+Groundwater,1973-03,2025-09,631,3108,1940 monitored district-months out of 5048 (Quarterly Cadence)

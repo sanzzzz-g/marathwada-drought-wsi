@@ -1,0 +1,26 @@
+model,regime,sample_count,mae,rmse
+Persistence,Very Wet,181,0.661,0.8179
+Persistence,Wet,744,0.3348,0.4315
+Persistence,Normal,155,0.5393,0.6809
+Persistence,Moderate Stress,0,0.0,0.0
+Persistence,Severe Stress,0,0.0,0.0
+Ridge_Regression,Very Wet,181,1.0763,1.2975
+Ridge_Regression,Wet,744,0.4903,0.6333
+Ridge_Regression,Normal,155,0.3109,0.3922
+Ridge_Regression,Moderate Stress,0,0.0,0.0
+Ridge_Regression,Severe Stress,0,0.0,0.0
+Seasonal_Persistence,Very Wet,181,0.6838,0.7963
+Seasonal_Persistence,Wet,744,0.4672,0.5881
+Seasonal_Persistence,Normal,155,0.993,1.1392
+Seasonal_Persistence,Moderate Stress,0,0.0,0.0
+Seasonal_Persistence,Severe Stress,0,0.0,0.0
+WSI_Autoregression,Very Wet,181,1.0031,1.1286
+WSI_Autoregression,Wet,744,0.425,0.519
+WSI_Autoregression,Normal,155,0.3194,0.3926
+WSI_Autoregression,Moderate Stress,0,0.0,0.0
+WSI_Autoregression,Severe Stress,0,0.0,0.0
+XGBoost,Very Wet,181,1.146,1.252
+XGBoost,Wet,744,0.4863,0.5894
+XGBoost,Normal,155,0.3016,0.3657
+XGBoost,Moderate Stress,0,0.0,0.0
+XGBoost,Severe Stress,0,0.0,0.0

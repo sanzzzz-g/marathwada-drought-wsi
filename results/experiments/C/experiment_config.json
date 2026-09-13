@@ -1,0 +1,53 @@
+{
+  "experiment": "C",
+  "description": "Residual LSTM + Explicit Current WSI State (WSI(t)) via Keras Functional API",
+  "scientific_note": "WSI(t) is already in the final timestep of the 6 stress inputs; C provides no new information but tests composite state inductive bias.",
+  "input_shapes": {
+    "sequence_input": [
+      12,
+      6
+    ],
+    "wsi_origin_input": [
+      1
+    ]
+  },
+  "target": "WSI(t+h) - WSI(t)",
+  "trainable_parameters": 5587,
+  "architecture": {
+    "lstm_units": 32,
+    "dropout": 0.2,
+    "concat_dimension": 33,
+    "dense_units": 16,
+    "output_units": 3
+  },
+  "training": {
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "loss": "Huber(delta=1.0)",
+    "batch_size": 32,
+    "max_epochs": 200,
+    "shuffle": false,
+    "seed": 42,
+    "monitor": "val_mae"
+  },
+  "selected_e_star": 3,
+  "frozen_lr_schedule": [
+    0.0010000000474974513,
+    0.0010000000474974513,
+    0.0010000000474974513
+  ],
+  "validation_results_seed_42": {
+    "best_epoch": 3,
+    "train_residual_mae": 0.365896,
+    "val_mae": 0.480891,
+    "val_mae_h1": 0.362764,
+    "val_mae_h2": 0.497729,
+    "val_mae_h3": 0.582178,
+    "val_rmse": 0.64657,
+    "val_rmse_h1": 0.474425,
+    "val_rmse_h2": 0.660706,
+    "val_rmse_h3": 0.769769,
+    "val_residual_mae": 0.480891,
+    "mae_equivalence_diff": 2.9802322387695312e-08
+  }
+}
