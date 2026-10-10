@@ -30,9 +30,11 @@ FINAL_POSSIBLE_ORIGIN = pd.Timestamp("2024-09-01")
 # Split origin boundaries
 TRAIN_START_ORIGIN = pd.Timestamp("2003-12-01")
 TRAIN_END_ORIGIN = pd.Timestamp("2017-09-01")
-VAL_START_ORIGIN = pd.Timestamp("2018-01-01")
-VAL_END_ORIGIN = pd.Timestamp("2020-12-01")
-TEST_START_ORIGIN = pd.Timestamp("2021-01-01")
+
+VAL_START_ORIGIN = pd.Timestamp("2017-12-01")
+VAL_END_ORIGIN = pd.Timestamp("2020-09-01")
+
+TEST_START_ORIGIN = pd.Timestamp("2020-12-01")
 TEST_END_ORIGIN = pd.Timestamp("2024-09-01")
 
 
@@ -252,18 +254,18 @@ def validate_generated_sequences(
     n_total = n_train + n_val + n_test
 
     assert n_train == 1328, f"Expected 1,328 train sequences, got {n_train}"
-    assert n_val == 288, f"Expected 288 val sequences, got {n_val}"
-    assert n_test == 360, f"Expected 360 test sequences, got {n_test}"
-    assert n_total == 1976, f"Expected 1,976 total sequences, got {n_total}"
-    assert len(meta_df) == 1976, f"Metadata row count {len(meta_df)} != 1976"
+    assert n_val == 272, f"Expected 272 val sequences, got {n_val}"
+    assert n_test == 368, f"Expected 368 test sequences, got {n_test}"
+    assert n_total == 1968, f"Expected 1,968 total sequences, got {n_total}"
+    assert len(meta_df) == 1968, f"Metadata row count {len(meta_df)} != 1968"
 
     # 2. Tensor shape checks
     assert arrays_X["train"].shape == (1328, 12, 6), f"Wrong X_train shape: {arrays_X['train'].shape}"
     assert arrays_y["train"].shape == (1328, 3), f"Wrong y_train shape: {arrays_y['train'].shape}"
-    assert arrays_X["val"].shape == (288, 12, 6), f"Wrong X_val shape: {arrays_X['val'].shape}"
-    assert arrays_y["val"].shape == (288, 3), f"Wrong y_val shape: {arrays_y['val'].shape}"
-    assert arrays_X["test"].shape == (360, 12, 6), f"Wrong X_test shape: {arrays_X['test'].shape}"
-    assert arrays_y["test"].shape == (360, 3), f"Wrong y_test shape: {arrays_y['test'].shape}"
+    assert arrays_X["val"].shape == (272, 12, 6), f"Wrong X_val shape: {arrays_X['val'].shape}"
+    assert arrays_y["val"].shape == (272, 3), f"Wrong y_val shape: {arrays_y['val'].shape}"
+    assert arrays_X["test"].shape == (368, 12, 6), f"Wrong X_test shape: {arrays_X['test'].shape}"
+    assert arrays_y["test"].shape == (368, 3), f"Wrong y_test shape: {arrays_y['test'].shape}"
 
     # 3. No NaN / Inf in any tensor
     for split in ["train", "val", "test"]:
@@ -274,29 +276,42 @@ def validate_generated_sequences(
 
     # 4. District balance check
     dist_counts = meta_df.groupby(["district", "split"]).size().unstack(fill_value=0)
+
     for dist in dist_counts.index:
         assert dist_counts.loc[dist, "train"] == 166, f"District {dist} train count != 166"
-        assert dist_counts.loc[dist, "val"] == 36, f"District {dist} val count != 36"
-        assert dist_counts.loc[dist, "test"] == 45, f"District {dist} test count != 45"
+        assert dist_counts.loc[dist, "val"] == 34, f"District {dist} val count != 34"
+        assert dist_counts.loc[dist, "test"] == 46, f"District {dist} test count != 46"
 
     # 5. Boundary checks
     train_meta = meta_df[meta_df["split"] == "train"]
     val_meta = meta_df[meta_df["split"] == "val"]
     test_meta = meta_df[meta_df["split"] == "test"]
 
-    assert train_meta["forecast_origin"].max() == "2017-09-01", "Max train origin != 2017-09-01"
-    assert val_meta["forecast_origin"].min() == "2018-01-01", "Min val origin != 2018-01-01"
-    assert val_meta["forecast_origin"].max() == "2020-12-01", "Max val origin != 2020-12-01"
-    assert test_meta["forecast_origin"].min() == "2021-01-01", "Min test origin != 2021-01-01"
-    assert test_meta["forecast_origin"].max() == "2024-09-01", "Max test origin != 2024-09-01"
+    assert train_meta["forecast_origin"].min() == "2003-12-01"
+    assert train_meta["forecast_origin"].max() == "2017-09-01"
 
-    # Training targets must never exceed 2017-12-01
-    assert (train_meta["target_t1"] <= "2017-12-01").all()
-    assert (train_meta["target_t2"] <= "2017-12-01").all()
+    assert val_meta["forecast_origin"].min() == "2017-12-01"
+    assert val_meta["forecast_origin"].max() == "2020-09-01"
+
+    assert test_meta["forecast_origin"].min() == "2020-12-01"
+    assert test_meta["forecast_origin"].max() == "2024-09-01"
+
+    # Training targets: January 2004–December 2017.
+    assert (train_meta["target_t1"] >= "2004-01-01").all()
     assert (train_meta["target_t3"] <= "2017-12-01").all()
 
-    # Targets strictly after input
-    assert (meta_df["target_t1"] > meta_df["input_end"]).all(), "Target t1 is not strictly after input_end!"
+    # Validation targets: January 2018–December 2020.
+    assert (val_meta["target_t1"] >= "2018-01-01").all()
+    assert (val_meta["target_t3"] <= "2020-12-01").all()
+
+    # Test targets: January 2021–December 2024.
+    assert (test_meta["target_t1"] >= "2021-01-01").all()
+    assert (test_meta["target_t3"] <= "2024-12-01").all()
+
+    # Targets must begin strictly after the input window.
+    assert (meta_df["target_t1"] > meta_df["input_end"]).all(), (
+    "Target t1 is not strictly after input_end!"
+    )
 
     # 6. Temporal continuity check per sequence
     for _, row in meta_df.iterrows():
@@ -355,7 +370,7 @@ def verify_sample_sequence_values(
         ("Latur", "2015-08-01", "train"),  # Historical acute drought
         ("Jalna", "2018-01-01", "val"),     # First validation origin
         ("Parbhani", "2020-05-01", "val"),
-        ("Nanded", "2021-01-01", "test"),   # First test origin
+        ("Nanded", "2020-12-01", "test"),   # First test origin
         ("Dharashiv", "2024-09-01", "test"),# Final test origin
     ]
 

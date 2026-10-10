@@ -52,8 +52,7 @@ def build_causal_sequences_at_origin(
                 std_val = 1.0
             std_df.loc[d_mask, feat] = (vals - mean_val) / std_val
 
-    # Recompute WSI as exact mean of 6 standardized features
-    std_df["wsi"] = std_df[FEATURES].mean(axis=1)
+
 
     X_train_list = []
     y_train_list = []
@@ -164,14 +163,22 @@ def run_historical_rolling_backtest(
         # 1. Persistence
         persist_preds = np.repeat(wsi_curr[:, -1:], repeats=3, axis=1)
 
-        # 2. Seasonal Persistence (lookback step 0, 1, 2 = t-11, t-10, t-9)
+
+        # 2. Seasonal Persistence
         seasonal_preds = np.zeros((n_dist, 3), dtype=np.float32)
         for i, meta in enumerate(meta_curr):
             dist = meta["district"]
             for h in range(1, 4):
                 t_date = pd.Timestamp(meta[f"target_t{h}"])
-                lag_key = (dist, (t_date - pd.DateOffset(months=12)).strftime("%Y-%m-%d"))
-                seasonal_preds[i, h - 1] = truth_lookup.get(lag_key, wsi_curr[i, h - 1])
+                lag_key = (
+                    dist,
+                    (t_date - pd.DateOffset(months=12)).strftime("%Y-%m-%d"),
+                )
+                # Fall back to origin WSI persistence if the seasonal lag is missing.
+                seasonal_preds[i, h - 1] = truth_lookup.get(
+                    lag_key, wsi_curr[i, -1]
+                )
+
 
         # 3. WSI Autoregression (AR-12 with Ridge)
         scaler_wsi = StandardScaler()

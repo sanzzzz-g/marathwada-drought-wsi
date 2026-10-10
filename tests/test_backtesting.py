@@ -68,3 +68,42 @@ def test_causal_preprocessing_no_future_leakage(panel_data):
     assert len(X_tr_2016) > len(X_tr_2012)
     assert not np.isnan(X_tr_2012).any()
     assert not np.isnan(X_tr_2016).any()
+
+
+
+def test_backtest_preserves_original_wsi(panel_data):
+    """Verify WSI history matches the stored dataset, not recomputed feature means."""
+    origin_t = pd.Timestamp("2015-06-01")
+
+    _, _, _, _, meta_curr, extras = build_causal_sequences_at_origin(
+        panel_df=panel_data,
+        origin_t=origin_t,
+        lookback=12,
+        horizon=3,
+    )
+
+    wsi_curr = extras["wsi_curr"]
+    source = panel_data.copy()
+    source["date"] = pd.to_datetime(source["date"])
+
+    # Each district's 12-month WSI history must match the original dataset.
+    for i, meta in enumerate(meta_curr):
+        district = meta["district"]
+        expected = (
+            source[
+                (source["district"] == district)
+                & (source["date"] <= origin_t)
+            ]
+            .sort_values("date")
+            .tail(12)["wsi"]
+            .to_numpy(dtype=np.float32)
+        )
+
+        assert len(expected) == 12
+        np.testing.assert_allclose(
+            wsi_curr[i],
+            expected,
+            rtol=1e-5,
+            atol=1e-5,
+            err_msg=f"WSI history changed for {district}",
+        )

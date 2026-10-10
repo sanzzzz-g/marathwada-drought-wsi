@@ -20,7 +20,7 @@ def sequence_data():
     """
     Fixture that loads or builds the sequence tensors and metadata.
     """
-    output_dir = "data_model"
+    output_dir = "data_model_v2"
     required_files = [
         os.path.join(output_dir, "X_train.npy"),
         os.path.join(output_dir, "y_train.npy"),
@@ -54,11 +54,18 @@ def sequence_data():
     }
 
 
+
 def test_total_sequence_count(sequence_data):
-    """Verifies that total sequence count across all splits is exactly 1,976."""
-    total = len(sequence_data["X_train"]) + len(sequence_data["X_val"]) + len(sequence_data["X_test"])
-    assert total == 1976, f"Expected 1,976 total sequences, got {total}"
-    assert len(sequence_data["meta"]) == 1976, f"Expected 1,976 metadata rows, got {len(sequence_data['meta'])}"
+    """Verifies that total sequence count across all splits is exactly 1,968."""
+    total = (
+        len(sequence_data["X_train"])
+        + len(sequence_data["X_val"])
+        + len(sequence_data["X_test"])
+    )
+    assert total == 1968, f"Expected 1,968 total sequences, got {total}"
+    assert len(sequence_data["meta"]) == 1968, (
+        f"Expected 1,968 metadata rows, got {len(sequence_data['meta'])}"
+    )
 
 
 def test_train_shape(sequence_data):
@@ -68,15 +75,15 @@ def test_train_shape(sequence_data):
 
 
 def test_validation_shape(sequence_data):
-    """Verifies X_val is (288, 12, 6) and y_val is (288, 3)."""
-    assert sequence_data["X_val"].shape == (288, 12, 6)
-    assert sequence_data["y_val"].shape == (288, 3)
+    """Verifies X_val is (272, 12, 6) and y_val is (272, 3)."""
+    assert sequence_data["X_val"].shape == (272, 12, 6)
+    assert sequence_data["y_val"].shape == (272, 3)
 
 
 def test_test_shape(sequence_data):
-    """Verifies X_test is (360, 12, 6) and y_test is (360, 3)."""
-    assert sequence_data["X_test"].shape == (360, 12, 6)
-    assert sequence_data["y_test"].shape == (360, 3)
+    """Verifies X_test is (368, 12, 6) and y_test is (368, 3)."""
+    assert sequence_data["X_test"].shape == (368, 12, 6)
+    assert sequence_data["y_test"].shape == (368, 3)
 
 
 def test_sequence_length(sequence_data):
@@ -136,40 +143,45 @@ def test_target_after_input(sequence_data):
 
 
 def test_split_boundaries(sequence_data):
-    """Verifies programmatic split origin boundaries and that no training target leaks into validation."""
+    """Verify forecast origins and target windows stay within their assigned splits."""
     meta = sequence_data["meta"]
     train = meta[meta["split"] == "train"]
     val = meta[meta["split"] == "val"]
     test = meta[meta["split"] == "test"]
 
+    # Forecast-origin boundaries
+    assert train["forecast_origin"].min() == "2003-12-01"
     assert train["forecast_origin"].max() == "2017-09-01"
-    assert val["forecast_origin"].min() == "2018-01-01"
-    assert val["forecast_origin"].max() == "2020-12-01"
-    assert test["forecast_origin"].min() == "2021-01-01"
+
+    assert val["forecast_origin"].min() == "2017-12-01"
+    assert val["forecast_origin"].max() == "2020-09-01"
+
+    assert test["forecast_origin"].min() == "2020-12-01"
     assert test["forecast_origin"].max() == "2024-09-01"
 
-    # All training targets must strictly be on or before 2017-12-01
-    assert (train["target_t1"] <= "2017-12-01").all()
-    assert (train["target_t2"] <= "2017-12-01").all()
+    # Training targets: January 2004–December 2017
+    assert (train["target_t1"] >= "2004-01-01").all()
     assert (train["target_t3"] <= "2017-12-01").all()
 
-    # All validation targets must be on or before 2021-03-01
-    assert (val["target_t3"] <= "2021-03-01").all()
+    # Validation targets: January 2018–December 2020
+    assert (val["target_t1"] >= "2018-01-01").all()
+    assert (val["target_t3"] <= "2020-12-01").all()
 
-    # All test targets must be on or before 2024-12-01
+    # Test targets: January 2021–December 2024
+    assert (test["target_t1"] >= "2021-01-01").all()
     assert (test["target_t3"] <= "2024-12-01").all()
 
 
 def test_district_balance(sequence_data):
-    """Verifies that every district has exactly 166 train, 36 val, and 45 test sequences."""
+    """Verify each district has 166 train, 34 validation, and 46 test sequences."""
     meta = sequence_data["meta"]
     counts = meta.groupby(["district", "split"]).size().unstack(fill_value=0)
 
     for dist in counts.index:
         assert counts.loc[dist, "train"] == 166, f"{dist} train count != 166"
-        assert counts.loc[dist, "val"] == 36, f"{dist} val count != 36"
-        assert counts.loc[dist, "test"] == 45, f"{dist} test count != 45"
-        assert counts.loc[dist].sum() == 247, f"{dist} total count != 247"
+        assert counts.loc[dist, "val"] == 34, f"{dist} val count != 34"
+        assert counts.loc[dist, "test"] == 46, f"{dist} test count != 46"
+        assert counts.loc[dist].sum() == 246, f"{dist} total count != 246"
 
 
 def test_no_missing_values(sequence_data):
