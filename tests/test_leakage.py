@@ -120,24 +120,41 @@ def test_no_future_groundwater_leakage():
 
 
 def test_forecast_origin_target_isolation():
-    """
-    Verifies that the forecast origins are strictly isolated so that:
-    1. The last training forecast origin (2017-09-01) targets t+1 (Oct 2017), t+2 (Nov 2017),
-       and t+3 (Dec 2017), which are all within the training set.
-    2. Zero training forecast targets fall in 2018 or later (zero target leakage into validation).
-    3. The first validation forecast origin (2018-01-01) targets Jan, Feb, Mar 2018.
-    4. The first test forecast origin (2021-01-01) targets Jan, Feb, Mar 2021.
-    """
-    last_train_origin = pd.Timestamp("2017-09-01")
+    """Verify that three-month target windows stay within their assigned periods."""
     horizon = 3
-    train_target_dates = [last_train_origin + pd.DateOffset(months=h) for h in range(1, horizon + 1)]
-    
+
+    # Last training origin: September 2017 -> October–December 2017.
+    last_train_origin = pd.Timestamp("2017-09-01")
+    train_targets = [
+        last_train_origin + pd.DateOffset(months=h)
+        for h in range(1, horizon + 1)
+    ]
     train_end = pd.Timestamp("2017-12-01")
-    assert all(d <= train_end for d in train_target_dates), (
-        f"Training origin {last_train_origin} leaked targets {train_target_dates} past train_end {train_end}!"
-    )
-    
-    # Validation targets
-    first_val_origin = pd.Timestamp("2018-01-01")
-    val_target_dates = [first_val_origin + pd.DateOffset(months=h) for h in range(1, horizon + 1)]
-    assert all(d > train_end for d in val_target_dates), "Validation origin targets overlap with training period!"
+    assert all(d <= train_end for d in train_targets)
+
+    # First validation origin: December 2017 -> January–March 2018.
+    first_val_origin = pd.Timestamp("2017-12-01")
+    val_targets = [
+        first_val_origin + pd.DateOffset(months=h)
+        for h in range(1, horizon + 1)
+    ]
+    assert val_targets == list(pd.date_range("2018-01-01", periods=3, freq="MS"))
+    assert all(d > train_end for d in val_targets)
+
+    # Last validation origin: September 2020 -> October–December 2020.
+    last_val_origin = pd.Timestamp("2020-09-01")
+    last_val_targets = [
+        last_val_origin + pd.DateOffset(months=h)
+        for h in range(1, horizon + 1)
+    ]
+    val_end = pd.Timestamp("2020-12-01")
+    assert all(d <= val_end for d in last_val_targets)
+
+    # First test origin: December 2020 -> January–March 2021.
+    first_test_origin = pd.Timestamp("2020-12-01")
+    test_targets = [
+        first_test_origin + pd.DateOffset(months=h)
+        for h in range(1, horizon + 1)
+    ]
+    assert test_targets == list(pd.date_range("2021-01-01", periods=3, freq="MS"))
+    assert all(d > val_end for d in test_targets)

@@ -471,6 +471,53 @@ def assemble_prediction_records(
     return records
 
 
+def build_wsi_histories(panel_df, metadata_df):
+    """Reconstruct each sequence's 12-month WSI history from the source panel."""
+    required = {"district", "date", "wsi"}
+    missing = required - set(panel_df.columns)
+    if missing:
+        raise ValueError(f"Panel is missing required columns: {sorted(missing)}")
+
+    panel = panel_df[["district", "date", "wsi"]].copy()
+    panel["date"] = pd.to_datetime(panel["date"])
+    if panel.duplicated(["district", "date"]).any():
+        raise ValueError("Panel contains duplicate district/date rows.")
+
+    lookup = panel.set_index(["district", "date"])["wsi"]
+    histories = []
+
+    for row in metadata_df.itertuples(index=False):
+        dates = pd.date_range(
+            start=pd.Timestamp(row.input_start),
+            end=pd.Timestamp(row.input_end),
+            freq="MS",
+        )
+        if len(dates) != 12:
+            raise ValueError(
+                f"Expected 12 history months, got {len(dates)} "
+                f"for {row.district} ending {row.input_end}"
+            )
+
+        keys = [(row.district, date) for date in dates]
+        try:
+            values = lookup.loc[keys].to_numpy(dtype=float)
+        except KeyError as exc:
+            raise ValueError(
+                f"Missing WSI history for {row.district}, "
+                f"{row.input_start} to {row.input_end}"
+            ) from exc
+
+        if not np.isfinite(values).all():
+            raise ValueError(
+                f"Non-finite WSI history for {row.district}, "
+                f"{row.input_start} to {row.input_end}"
+            )
+
+        histories.append(values)
+
+    return np.asarray(histories, dtype=float)
+
+
 # Pipeline Execution & Champion Selection
 
 def run_baseline_suite(
@@ -494,9 +541,27 @@ def run_baseline_suite(
     meta_val = meta_df[meta_df["split"] == "val"].reset_index(drop=True)
     meta_test = meta_df[meta_df["split"] == "test"].reset_index(drop=True)
 
+
+
+
     panel_df = None
     if os.path.exists(model_dataset_path):
         panel_df = pd.read_csv(model_dataset_path)
+
+
+    if panel_df is None:
+        raise FileNotFoundError(
+            f"WSI panel required to reconstruct histories: {model_dataset_path}"
+        )
+
+    wsi_train = build_wsi_histories(panel_df, meta_train)
+    wsi_val = build_wsi_histories(panel_df, meta_val)
+    wsi_test = build_wsi_histories(panel_df, meta_test)
+
+    assert len(wsi_train) == len(X_train)
+    assert len(wsi_val) == len(X_val)
+    assert len(wsi_test) == len(X_test)
+
 
     forecasters: List[BaseForecaster] = [
         PersistenceForecaster(),
@@ -514,9 +579,32 @@ def run_baseline_suite(
     print("\nPhase 1: Fitting baselines on TRAIN and generating VALIDATION predictions...")
     for model in forecasters:
         print(f"  -> Fitting {model.name}...")
+
         if isinstance(model, SeasonalPersistenceForecaster):
             model.fit(X_train, y_train)
             val_preds = model.predict(X_val, metadata_df=meta_val)
+
+        elif isinstance(model, PersistenceForecaster):
+            model.fit(X_train, y_train)
+            val_preds = model.predict(
+                X_val,
+                origin_wsi=wsi_val[:, -1],
+            )
+
+        elif isinstance(model, WSIAutoregressiveForecaster):
+            model.fit(
+                X_train,
+                y_train,
+                X_val=X_val,
+                y_val=y_val,
+                wsi_train=wsi_train,
+                wsi_val=wsi_val,
+            )
+            val_preds = model.predict(
+                X_val,
+                wsi_input=wsi_val,
+            )
+
         else:
             model.fit(X_train, y_train, X_val=X_val, y_val=y_val)
             val_preds = model.predict(X_val)
@@ -561,10 +649,39 @@ def run_baseline_suite(
     test_records: List[Dict[str, Any]] = []
     test_model_metrics: Dict[str, Dict[str, float]] = {}
 
+
+
     for model in forecasters:
         print(f"  -> Refitting {model.name} and predicting TEST...")
+
         if isinstance(model, SeasonalPersistenceForecaster):
-            test_preds = model.predict(X_test, metadata_df=meta_test)
+            test_preds = model.predict(
+                X_test,
+                metadata_df=meta_test,
+            )
+
+        elif isinstance(model, PersistenceForecaster):
+            model.refit(X_train_val, y_train_val)
+            test_preds = model.predict(
+                X_test,
+                origin_wsi=wsi_test[:, -1],
+            )
+
+        elif isinstance(model, WSIAutoregressiveForecaster):
+            wsi_train_val = np.concatenate(
+                [wsi_train, wsi_val],
+                axis=0,
+            )
+            model.refit(
+                X_train_val,
+                y_train_val,
+                wsi_train_val=wsi_train_val,
+            )
+            test_preds = model.predict(
+                X_test,
+                wsi_input=wsi_test,
+            )
+
         else:
             model.refit(X_train_val, y_train_val)
             test_preds = model.predict(X_test)
@@ -578,8 +695,14 @@ def run_baseline_suite(
         )
         test_records.extend(test_recs)
 
-        mae_h = [np.mean(np.abs(test_preds[:, h] - y_test[:, h])) for h in range(3)]
-        rmse_h = [np.sqrt(np.mean((test_preds[:, h] - y_test[:, h]) ** 2)) for h in range(3)]
+        mae_h = [
+            np.mean(np.abs(test_preds[:, h] - y_test[:, h]))
+            for h in range(3)
+        ]
+        rmse_h = [
+            np.sqrt(np.mean((test_preds[:, h] - y_test[:, h]) ** 2))
+            for h in range(3)
+        ]
         test_model_metrics[model.name] = {
             "test_mae_h1": round(float(mae_h[0]), 5),
             "test_mae_h2": round(float(mae_h[1]), 5),
@@ -587,6 +710,8 @@ def run_baseline_suite(
             "mean_test_mae": round(float(np.mean(mae_h)), 5),
             "mean_test_rmse": round(float(np.mean(rmse_h)), 5),
         }
+
+
 
     val_pred_df = pd.DataFrame(val_records)
     test_pred_df = pd.DataFrame(test_records)
@@ -598,11 +723,11 @@ def run_baseline_suite(
     test_pred_df.to_csv(test_csv_path, index=False)
 
     print(f"\nPhase 4: Artifact Persistence:")
-    print(f"  - Saved validation predictions: {val_csv_path} ({len(val_pred_df)} rows; expected 4,320)")
-    print(f"  - Saved official test predictions: {test_csv_path} ({len(test_pred_df)} rows; expected 5,400)")
+    print(f"  - Saved validation predictions: {val_csv_path} ({len(val_pred_df)} rows; expected 4,080)")
+    print(f"  - Saved official test predictions: {test_csv_path} ({len(test_pred_df)} rows; expected 5,520)")
 
-    assert len(val_pred_df) == 5 * 288 * 3, f"Unexpected validation rows: {len(val_pred_df)}"
-    assert len(test_pred_df) == 5 * 360 * 3, f"Unexpected test rows: {len(test_pred_df)}"
+    assert len(val_pred_df) == 5 * 272 * 3, f"Unexpected validation rows: {len(val_pred_df)}"
+    assert len(test_pred_df) == 5 * 368 * 3, f"Unexpected test rows: {len(test_pred_df)}"
 
     summary_data = {
         "models": [m.name for m in forecasters],
